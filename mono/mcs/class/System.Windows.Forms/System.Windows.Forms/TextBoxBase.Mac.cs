@@ -813,6 +813,28 @@ namespace System.Windows.Forms
 
 		protected override void WndProc(ref Message m)
 		{
+			switch ((Msg)m.Msg)
+			{
+				case Msg.WM_KEYDOWN:
+					WmKeyDown(ref m);
+					break;
+				default:
+					base.WndProc(ref m);
+					return;
+			}
+		}
+
+		private void WmKeyDown(ref Message m)
+		{
+			Keys keyCode = (Keys)(m.WParam.ToInt32() & (int)Keys.KeyCode);
+			if (keyCode == Keys.Return && !accepts_return) // && Multiline && accepts_return)
+			{
+				base.WndProc(ref m);
+
+				m.Result = (IntPtr)1; // Do not deliver the original event to the native field editor.
+				return;
+			}
+
 			base.WndProc(ref m);
 		}
 

@@ -117,6 +117,11 @@ namespace System.Windows.Forms {
 				event_handled = value;
 			}
 		}
-		#endregion	// Public Instance Properties
+		#endregion // Public Instance Properties
+
+		public override string ToString()
+		{
+			return $"KeyEventArgs[KeyCode={KeyCode}, Modifiers={Modifiers}, KeyValue={KeyValue}]";
+		}
 	}
 }

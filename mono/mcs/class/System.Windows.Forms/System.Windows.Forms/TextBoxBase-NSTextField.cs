@@ -378,7 +378,7 @@ namespace System.Windows.Forms
 			{
 				XplatUI.SendMessage(owner.Handle, Msg.WM_KEYDOWN, (IntPtr)key, lParam);
 
-				if (owner.IsHandleCreated) // The previous line could have caused disposing the control (esc, enter, ...)
+				if (owner != null && owner.IsHandleCreated) // The previous line could have caused disposing the control (esc, enter, ...)
 					XplatUI.SendMessage(owner.Handle, Msg.WM_KEYUP, (IntPtr)key, lParam);
 			}
 

@@ -208,6 +208,19 @@ namespace System.Windows.Forms {
 
 		#region Protected Instance Methods
 
+		protected override void OnGotFocus(EventArgs e)
+		{
+			base.OnGotFocus(e);
+
+			if (!has_been_focused)
+			{
+				has_been_focused = true;
+
+				if (SelectionLength == 0 && Control.MouseButtons == MouseButtons.None)
+					SelectAllNoScroll();
+			}
+		}
+
 		protected override void Dispose(bool disposing)
 		{
 			base.Dispose(disposing);

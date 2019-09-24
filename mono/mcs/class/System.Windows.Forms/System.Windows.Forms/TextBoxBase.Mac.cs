@@ -442,6 +442,9 @@ namespace System.Windows.Forms
 				if (value < 0)
 					throw new ArgumentOutOfRangeException();
 
+				// If SelectionStart has been used, we don't highlight on focus
+				has_been_focused = true;
+
 				int start = SelectionStart;
 				int length = Math.Min(Text.Length - start, value);
 				Imp.Select(start, length);
@@ -477,6 +480,9 @@ namespace System.Windows.Forms
 			get { return Imp.Text; }
 			set
 			{
+				// reset to force a select all next time the box gets focus
+				has_been_focused = false;
+
 				if (Imp.Text != value)
 				{
 					Imp.Text = value;
@@ -575,6 +581,9 @@ namespace System.Windows.Forms
 			//MoveCaret(CaretDirection.CtrlEnd);
 			//SetSelectionToCaret(true);
 			//ScrollToCaret();
+
+			// Avoid the initial focus selecting all when append text is used
+			has_been_focused = true;
 
 			Modified = false;
 			OnTextChanged(EventArgs.Empty);

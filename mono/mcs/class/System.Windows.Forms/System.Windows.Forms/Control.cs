@@ -1518,151 +1518,142 @@ namespace System.Windows.Forms
 			return ProcessMnemonic(charCode);
 		}
 
-		private static Control FindFlatForward(Control container, Control start) {
-			Control	found;
-			int	index;
-			int	end;
-			bool hit;
+		public Control GetNextControl(Control ctl, bool forward)
+		{
+			return forward ? GetNextControlForward(ctl) : GetNextControlBackward(ctl);
+		}
 
-			found = null;
-			end = container.child_controls.Count;
-			hit = false;
+		internal Control GetNextControlForward(Control ctl)
+		{
+			if (!Contains(ctl))
+				ctl = this;
 
-			if (start != null) {
-				index = start.tab_index;
-			} else {
-				index = -1;
+			if (ctl == this || !IsFocusManagingContainerControl(ctl))
+			{
+				Control found = ctl.GetFirstChildControlInTabOrderForward();
+				if (found != null)
+					return found;
 			}
 
-			for (int i = 0; i < end; i++) {
-				if (start == container.child_controls[i]) {
-					hit = true;
-					continue;
-				}
+			while (ctl != this)
+			{
+				int targetIndex = ctl.tab_index;
+				bool hitCtl = false;
+				Control found = null;
+				Control p = ctl.parent;
 
-				if (found == null || found.tab_index > container.child_controls[i].tab_index) {
-					if (container.child_controls[i].tab_index > index || (hit && container.child_controls[i].tab_index == index)) {
-						found = container.child_controls[i];
+				// Cycle through the controls in z-order looking for the one with the next highest
+				// tab index.  Because there can be dups, we have to start with the existing tab index and
+				// remember to exclude the current control.
+				var parentControls = p.Controls;
+				foreach (Control c in parentControls)
+				{
+					if (c != ctl)
+					{
+						if (c.tab_index >= targetIndex)
+							if (found == null || found.tab_index > c.tab_index)
+								if (c.tab_index != targetIndex || hitCtl)
+									found = c;
+					}
+					else
+					{
+						hitCtl = true;
 					}
 				}
+
+				if (found != null)
+					return found;
+
+				ctl = ctl.parent;
 			}
-			return found;
+
+			return ctl == this ? null : ctl;
 		}
 
-		private static Control FindControlForward(Control container, Control start) {
-			Control found;
+		internal Control GetNextControlBackward(Control ctl)
+		{
+			if (!Contains(ctl))
+				ctl = this;
 
-			found = null;
+			if (ctl != this)
+			{
+				int targetIndex = ctl.tab_index;
+				bool hitCtl = false;
+				Control found = null;
+				Control p = ctl.parent;
 
-			if (start == null) {
-				return FindFlatForward(container, start);
-			}
+				// Cycle through the controls in reverse z-order looking for the next lowest tab index.  We must
+				// start with the same tab index as ctl, because there can be dups.
+				int parentControlCount = 0;
+				IList parentControls = p.Controls;
+				if (parentControls != null)
+					parentControlCount = parentControls.Count;
 
-			if (start.child_controls != null && start.child_controls.Count > 0 && 
-				(start == container || !((start is IContainerControl) &&  start.GetStyle(ControlStyles.ContainerControl)))) {
-				return FindControlForward(start, null);
-			}
-			else {
-				while (start != container) {
-					found = FindFlatForward(start.parent, start);
-					if (found != null) {
-						return found;
+				for (int i = parentControlCount - 1; i >= 0; i--)
+				{
+					Control c = (Control)parentControls[i];
+					if (c != ctl)
+					{
+						if (c.tab_index <= targetIndex)
+							if (found == null || found.tab_index < c.tab_index)
+								if (c.tab_index != targetIndex || hitCtl)
+									found = c;
 					}
-					start = start.parent;
+					else
+					{
+						hitCtl = true;
+					}
 				}
+
+				// If we were unable to find a control we should return the control's parent.  However, if that parent is us, return NULL.
+				if (found != null)
+					ctl = found;
+				else
+					return p == this ? null : p;
 			}
-			return null;
+
+			// We found a control.  Walk into this control to find the proper sub control within it to select.
+			IList ctlControls = ctl.Controls;
+			while (ctlControls != null && ctlControls.Count > 0 && (ctl == this || !IsFocusManagingContainerControl(ctl)))
+			{
+				Control found = ctl.GetFirstChildControlInTabOrderBackward();
+				if (found != null)
+				{
+					ctl = found;
+					ctlControls = ctl.Controls;
+				}
+				else
+					break;
+			}
+
+			return ctl == this ? null : ctl;
 		}
 
-		private static Control FindFlatBackward(Control container, Control start) {
-			Control	found;
-			int	index;
-			int	end;
-			bool hit;
-
-			found = null;
-			end = container.child_controls.Count;
-			hit = false;
-
-			if (start != null) {
-				index = start.tab_index;
-			} else {
-				index = int.MaxValue;
-			}
-
-			for (int i = end - 1; i >= 0; i--) {
-				if (start == container.child_controls[i]) {
-					hit = true;
-					continue;
-				}
-
-				if (found == null || found.tab_index < container.child_controls[i].tab_index) {
-					if (container.child_controls[i].tab_index < index || (hit && container.child_controls[i].tab_index == index))
-						found = container.child_controls[i];
-
-				}
-			}
-			return found;
-		}
-
-		private static Control FindControlBackward(Control container, Control start) {
-
+		internal virtual Control GetFirstChildControlInTabOrderForward()
+		{
 			Control found = null;
-
-			if (start == null) {
-				found = FindFlatBackward(container, start);
-			}
-			else if (start != container) {
-				if (start.parent != null) {
-					found = FindFlatBackward(start.parent, start);
-
-					if (found == null) {
-						if (start.parent != container)
-							return start.parent;
-						return null;
-					}
-				}
-			}
-		
-			if (found == null || start.parent == null)
-				found = start;
-
-			while (found != null && (found == container || (!((found is IContainerControl) && found.GetStyle(ControlStyles.ContainerControl))) &&
-				found.child_controls != null && found.child_controls.Count > 0)) {
-//				while (ctl.child_controls != null && ctl.child_controls.Count > 0 && 
-//					(ctl == this || (!((ctl is IContainerControl) && ctl.GetStyle(ControlStyles.ContainerControl))))) {
-				found = FindFlatBackward(found, null);
-			}
-
-			return found;
-
-/*
-			Control found;
-
-			found = null;
-
-			if (start != null) {
-				found = FindFlatBackward(start.parent, start);
-				if (found == null) {
-					if (start.parent != container) {
-						return start.parent;
-					}
-				}
-			}
-			if (found == null) {
-				found = FindFlatBackward(container, start);
-			}
-
-			if (container != start) {
-				while ((found != null) && (!found.Contains(start)) && found.child_controls != null && found.child_controls.Count > 0 && !(found is IContainerControl)) {// || found.GetStyle(ControlStyles.ContainerControl))) {
-					found = FindControlBackward(found, null);
-					 if (found != null) {
-						return found;
-					}
-				}
+			IList controls = Controls;
+			for (int c = 0; c < controls.Count; c++)
+			{
+				Control ctl = (Control)controls[c];
+				if (found == null || found.tab_index > ctl.tab_index)
+					found = ctl;
 			}
 			return found;
-*/			
+		}
+
+		internal virtual Control GetFirstChildControlInTabOrderBackward()
+		{
+			Control found = null;
+			IList controls = Controls;
+			// Cycle through the controls in reverse z-order looking for the one with the highest tab index.
+			for (int c = controls.Count - 1; c >= 0; c--)
+			{
+				Control ctl = (Control)controls[c];
+				if (found == null || found.tab_index < ctl.tab_index)
+					found = ctl;
+			}
+			return found;
 		}
 
 		internal virtual void HandleClick(int clicks, MouseEventArgs me) {
@@ -3814,25 +3805,6 @@ namespace System.Windows.Forms
 				c = c.Parent;
 			}
 			return (ContainerControl)c;
-		}
-
-		public Control GetNextControl(Control ctl, bool forward) {
-
-			if (!this.Contains(ctl)) {
-				ctl = this;
-			}
-
-			if (forward) {
-				ctl = FindControlForward(this, ctl);
-			}
-			else {
-				ctl = FindControlBackward(this, ctl);
-			}
-
-			if (ctl != this) {
-				return ctl;
-			}
-			return null;
 		}
 
 		private Size ApplySizeConstraints (Size proposedSize) {

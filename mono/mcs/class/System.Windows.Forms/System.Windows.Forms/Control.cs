@@ -142,8 +142,8 @@ namespace System.Windows.Forms
 		internal Padding				anchor_values;
 #endif // USE_INITIAL_ANCHOR_VALUES
 		// to be categorized...
-		ControlCollection       child_controls; // our children
-		Control                 parent; // our parent control
+		ControlCollection       child_controls_; // our children
+		Control                 parent_; // our parent control
 		BindingContext          binding_context;
 		RightToLeft             right_to_left; // drawing direction for control
 		ContextMenu             context_menu; // Context menu associated with the control
@@ -1294,7 +1294,9 @@ namespace System.Windows.Forms
 				return false;
 			}
 
-			container = GetContainerControl();
+			using (_ = new Focusing())
+				container = GetContainerControl();
+
 			if (container != null && (Control)container != control) {
 				container.ActiveControl = control;
 				// NOTE: There should be no need to focus control that is already focused (see callers).
@@ -1520,7 +1522,8 @@ namespace System.Windows.Forms
 
 		public Control GetNextControl(Control ctl, bool forward)
 		{
-			return forward ? GetNextControlForward(ctl) : GetNextControlBackward(ctl);
+			using (_ = new Focusing())
+				return forward ? GetNextControlForward(ctl) : GetNextControlBackward(ctl);
 		}
 
 		internal Control GetNextControlForward(Control ctl)
@@ -1546,8 +1549,9 @@ namespace System.Windows.Forms
 				// tab index.  Because there can be dups, we have to start with the existing tab index and
 				// remember to exclude the current control.
 				var parentControls = p.Controls;
-				foreach (Control c in parentControls)
+				for (int i = 0; i < parentControls.Count; ++i)
 				{
+					Control c = (Control)parentControls[i];
 					if (c != ctl)
 					{
 						if (c.tab_index >= targetIndex)
@@ -1585,7 +1589,7 @@ namespace System.Windows.Forms
 				// Cycle through the controls in reverse z-order looking for the next lowest tab index.  We must
 				// start with the same tab index as ctl, because there can be dups.
 				int parentControlCount = 0;
-				IList parentControls = p.Controls;
+				ControlCollection parentControls = p.Controls;
 				if (parentControls != null)
 					parentControlCount = parentControls.Count;
 
@@ -1613,7 +1617,7 @@ namespace System.Windows.Forms
 			}
 
 			// We found a control.  Walk into this control to find the proper sub control within it to select.
-			IList ctlControls = ctl.Controls;
+			ControlCollection ctlControls = ctl.Controls;
 			while (ctlControls != null && ctlControls.Count > 0 && (ctl == this || !IsFocusManagingContainerControl(ctl)))
 			{
 				Control found = ctl.GetFirstChildControlInTabOrderBackward();
@@ -1632,7 +1636,7 @@ namespace System.Windows.Forms
 		internal virtual Control GetFirstChildControlInTabOrderForward()
 		{
 			Control found = null;
-			IList controls = Controls;
+			ControlCollection controls = Controls;
 			for (int c = 0; c < controls.Count; c++)
 			{
 				Control ctl = (Control)controls[c];
@@ -1645,7 +1649,7 @@ namespace System.Windows.Forms
 		internal virtual Control GetFirstChildControlInTabOrderBackward()
 		{
 			Control found = null;
-			IList controls = Controls;
+			ControlCollection controls = Controls;
 			// Cycle through the controls in reverse z-order looking for the one with the highest tab index.
 			for (int c = controls.Count - 1; c >= 0; c--)
 			{
@@ -1685,10 +1689,16 @@ namespace System.Windows.Forms
 
 		internal static bool IsChild (IntPtr hWndParent, IntPtr hWnd)
 		{
-			for (var parent = XplatUI.GetParent(hWnd, true); parent != IntPtr.Zero; parent = XplatUI.GetParent(parent, true)) {
-				if (parent == hWndParent) {
+			for (var parent = XplatUI.GetParent(hWnd, true); parent != IntPtr.Zero; parent = XplatUI.GetParent(parent, true))
+				if (parent == hWndParent)
 					return true;
-				}
+
+			if (Focusing.isActive)
+			{
+				Control p = FromHandle(hWndParent), c = FromHandle(hWnd);
+				for (var parent = c?.parent; parent != null; parent = parent.parent)
+					if (parent == p)
+						return true;
 			}
 
 			return false;
@@ -4206,7 +4216,13 @@ namespace System.Windows.Forms
 			}
 		}
 #endif
-		public bool SelectNextControl(Control ctl, bool forward, bool tabStopOnly, bool nested, bool wrap) {
+		public bool SelectNextControl(Control ctl, bool forward, bool tabStopOnly, bool nested, bool wrap)
+		{
+			using (_ = new Focusing())
+				return SelectNextControlInternal(ctl, forward, tabStopOnly, nested, wrap);
+		}
+
+		public bool SelectNextControlInternal(Control ctl, bool forward, bool tabStopOnly, bool nested, bool wrap) {
 			Control c;
 
 #if DebugFocus
@@ -6913,6 +6929,42 @@ namespace System.Windows.Forms
 		internal static void NotImplemented(MethodBase method, object value = null)
 		{
 			Debug.WriteLine("Not Implemented: " + method.ReflectedType.Name + "." + method.Name);
+		}
+
+		// The following stuff allows for tabbing (focus cycling) also through controls that were taken out
+		// of the control hierarchy, namely controls that were moved to the title bar accessory view on the Mac.
+		// The class Focusing now causes 'parent' and 'child_controls' to return different values
+		// when selecting / not selecting the next control.
+
+		private Control focusing_parent;
+		private ControlCollection focusing_controls;
+
+		Control parent
+		{
+			get { return Focusing.isActive ? focusing_parent ?? parent_ : parent_; }
+			set { parent_ = value; }
+		}
+
+		ControlCollection child_controls
+		{
+			get { return Focusing.isActive ? focusing_controls ?? child_controls_ : child_controls_; }
+			set { child_controls_ = value; }
+		}
+
+		internal class Focusing : IDisposable
+		{
+			public static bool isActive;
+			bool wasActive;
+
+			public Focusing(bool active = true)
+			{
+				wasActive = isActive;
+				isActive = active;
+			}
+			public void Dispose()
+			{
+				isActive = wasActive;
+			}
 		}
 	}
 }

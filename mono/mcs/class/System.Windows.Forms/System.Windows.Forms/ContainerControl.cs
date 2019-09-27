@@ -63,7 +63,7 @@ namespace System.Windows.Forms {
 		#endregion	// Public Constructors
 
 		#region Public Instance Properties
-		[Browsable (false)]
+		[Browsable(false)]
 		[DesignerSerializationVisibility(DesignerSerializationVisibility.Hidden)]
 		public Control ActiveControl {
 			get {
@@ -71,6 +71,14 @@ namespace System.Windows.Forms {
 			}
 
 			set {
+				SetActiveControl(value);
+			}
+		}
+
+		internal void SetActiveControl(Control value)
+		{
+			using (_ = new Focusing())
+			{
 				if (active_control == value && (value == null || value.Focused)) {
 					return;
 				}
@@ -604,10 +612,13 @@ namespace System.Windows.Forms {
 
 		protected override bool ProcessCmdKey (ref Message msg, Keys keyData)
 		{
+			if (base.ProcessCmdKey(ref msg, keyData))
+				return true;
+
 			if (ToolStripManager.ProcessCmdKey (ref msg, keyData) == true)
 				return true;
 				
-			return base.ProcessCmdKey (ref msg, keyData);
+			return false;
 		}
 
 		[EditorBrowsable (EditorBrowsableState.Advanced)]
@@ -622,11 +633,13 @@ namespace System.Windows.Forms {
 
 		protected override bool ProcessDialogKey(Keys keyData)
 		{
+			bool tabbing = false;
 			if ((keyData & (Keys.Alt | Keys.Control)) == Keys.None)
 			{
 				Keys key = keyData & Keys.KeyCode;
 				switch (key) {
 					case Keys.Tab:
+						tabbing = true;
 						if (ProcessTabKey((keyData & Keys.Shift) == 0))
 							return true;
 						break;
@@ -639,7 +652,8 @@ namespace System.Windows.Forms {
 						break;
 				}
 			}
-			return base.ProcessDialogKey(keyData);
+			using (_ = new Focusing(tabbing))
+				return base.ProcessDialogKey(keyData);
 		}
 
 		protected override bool ProcessMnemonic(char charCode) {
@@ -679,15 +693,18 @@ namespace System.Windows.Forms {
 
 		protected override void Select(bool directed, bool forward)
 		{
-			if (Parent != null) {
-				IContainerControl parent = Parent.GetContainerControl ();
-				if (parent != null) {
-					parent.ActiveControl = this;
+			using (_ = new Focusing())
+			{
+				if (Parent != null) {
+					IContainerControl parent = Parent.GetContainerControl();
+					if (parent != null) {
+						parent.ActiveControl = this;
+					}
 				}
-			}
 
-			if (directed && auto_select_child) {
-				SelectNextControl (null, forward, true, true, false);
+				if (directed && auto_select_child) {
+					SelectNextControl(null, forward, true, true, false);
+				}
 			}
 		}
 
@@ -734,12 +751,14 @@ namespace System.Windows.Forms {
 			} else {
 				// Determine and focus closest visible parent
 				ContainerControl cc = this;
-				while (cc != null && !cc.Visible) {
-					Control parent = cc.Parent;
-					if (parent != null)
-						cc = parent.GetContainerControl() as ContainerControl;
-					else
-						break;
+				using (_ = new Focusing()) {
+					while (cc != null && !cc.Visible) {
+						Control parent = cc.Parent;
+						if (parent != null)
+							cc = parent.GetContainerControl() as ContainerControl;
+						else
+							break;
+					}
 				}
 				if (cc != null && cc.Visible)
 					XplatUI.SetFocus(cc.Handle);

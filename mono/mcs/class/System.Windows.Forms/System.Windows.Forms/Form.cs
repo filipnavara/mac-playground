@@ -2830,10 +2830,6 @@ namespace System.Windows.Forms {
 			if (m.WParam != (IntPtr)WindowActiveFlags.WA_INACTIVE) {
 				if (is_loaded) {
 					SelectActiveControl ();
-
-					var innermostActiveControl = GetMostDeeplyNestedActiveControl(this);
-					if (innermostActiveControl != null && !innermostActiveControl.Focused)
-						SendControlFocus (innermostActiveControl);
 				}
 
 				IsActive = true;

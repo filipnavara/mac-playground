@@ -90,7 +90,8 @@ namespace System.Windows.Forms {
 				if (value == null) {
 					Control previous_active_control = active_control;
 					active_control = null;
-					previous_active_control?.FireLeave();
+					using (_ = new Focusing(false))
+						previous_active_control?.FireLeave();
 					return;
 				}
 
@@ -140,7 +141,8 @@ namespace System.Windows.Forms {
 						fire_enter = false;
 						break;
 					}
-					walk.FireLeave ();
+					using (_ = new Focusing(false))
+						walk.FireLeave ();
 					/* clear our idea of the active control as we go back up */
 					if (walk is ContainerControl)
 						((ContainerControl)walk).active_control = null;
@@ -190,7 +192,8 @@ namespace System.Windows.Forms {
 
 					for (int i = chain.Count - 1; i >= 0; i--) {
 						walk = (Control) chain [i];
-						walk.FireEnter ();
+						using (_ = new Focusing(false))
+							walk.FireEnter ();
 					}
 				}
 

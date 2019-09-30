@@ -650,13 +650,22 @@ namespace System.Windows.Forms {
 					case Keys.Right:
 					case Keys.Up:
 					case Keys.Down:
-						if (SelectNextControl(active_control, key == Keys.Right || key == Keys.Down, false, false, true))
+						if (ProcessArrowKey(key == Keys.Right || key == Keys.Down))
 							return true;
 						break;
 				}
 			}
 			using (_ = new Focusing(tabbing))
 				return base.ProcessDialogKey(keyData);
+		}
+
+		private bool ProcessArrowKey(bool forward)
+		{
+			Control group = this;
+			if (active_control != null)
+				group = active_control.Parent;
+
+			return group.SelectNextControl(active_control, forward, false, false, true);
 		}
 
 		protected override bool ProcessMnemonic(char charCode) {

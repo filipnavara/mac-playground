@@ -64,6 +64,7 @@ using System.Collections;
 using System.Collections.Specialized;
 using System.ComponentModel;
 using System.ComponentModel.Design.Serialization;
+using System.Diagnostics;
 using System.Drawing;
 using System.Drawing.Design;
 using System.Drawing.Imaging;
@@ -80,7 +81,11 @@ namespace System.Windows.Forms
 	public sealed class ImageList : System.ComponentModel.Component
 	{
 		#region Private Fields
+#if __MACOS__
+		private const ColorDepth DefaultColorDepth = ColorDepth.Depth32Bit;
+#else
 		private const ColorDepth DefaultColorDepth = ColorDepth.Depth8Bit;
+#endif
 		private static readonly Size DefaultImageSize = new Size(16, 16);
 		private static readonly Color DefaultTransparentColor = Color.Transparent;
 		private object tag;
@@ -228,6 +233,10 @@ namespace System.Windows.Forms
 				set {
 					if (!Enum.IsDefined(typeof(ColorDepth), value))
 						throw new InvalidEnumArgumentException("value", (int)value, typeof(ColorDepth));
+
+#if __MACOS__
+					Debug.Assert(value == ColorDepth.Depth32Bit, "ImageList: Only 32-bit color depth supported on macOS");
+#endif
 
 					if (this.colorDepth != value) {
 						this.colorDepth = value;

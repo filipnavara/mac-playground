@@ -454,7 +454,9 @@ namespace System.Windows.Forms
 			get { return activated_by_keyboard; }
 			set { activated_by_keyboard = value; }
 		}
-		
+
+		internal static bool DismissingHandledNatively { get; set; }
+
 		internal static void AddToolStrip (ToolStrip ts)
 		{
 			lock (toolstrips)

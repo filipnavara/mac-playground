@@ -103,8 +103,13 @@ namespace System.Windows.Forms.CocoaInternal
 			// Further reading:
 			// https://stackoverflow.com/questions/9986267/mouse-enter-exit-events-on-partially-hidden-nsviews
 
+			// While dragging, both e.Window and e.WindowNumber relate to the window in which the dragging session started,
+			// but e.LocationInWindow always contains the location relative to the window under the cursor!
+			var num = NSWindow.WindowNumberAtPoint(NSEvent.CurrentMouseLocation, 0);
+			var window = NSApplication.SharedApplication.WindowWithWindowNumber(num) ?? e.Window;
+
 			var msg = TranslateMouseCore(e, out bool client);
-			var newMouseView = e.Window?.ContentView.HitTest(e.LocationInWindow) ?? e.Window?.ContentView.Superview?.HitTest(e.LocationInWindow);
+			var newMouseView = window?.ContentView.HitTest(e.LocationInWindow) ?? window?.ContentView.Superview?.HitTest(e.LocationInWindow);
 			var newMouseViewHandle = newMouseView is MonoView ? newMouseView.Handle : IntPtr.Zero;
 
 #if DEBUG_MOUSE_ENTER_EXIT
@@ -200,20 +205,25 @@ namespace System.Windows.Forms.CocoaInternal
 
 		internal void TranslateMouseUp(NSEvent e)
 		{
-			var msg = TranslateMouseCore(e, out bool client);
+			var msg = TranslateMouseCore(e, out bool client, MouseTarget());
 			msg.message = (client ? Msg.WM_LBUTTONUP : Msg.WM_NCLBUTTONUP) + MsgOffset4Button(e);
 			msg.wParam = (IntPtr)(e.ModifierFlags.ToWParam() | e.ButtonNumberToWParam());
 			LastMouseDownMsg.hwnd = IntPtr.Zero;
 			Application.SendMessage(ref msg);
 		}
 
+		internal NSView MouseTarget()
+		{
+			if (driver.Grab.Hwnd.ToNSObject() is NSView grab)
+				return grab;
+			if (driver.LastEnteredHwnd.ToNSObject() is NSView hover)
+				return hover;
+			return null;
+		}
+
 		public override void MouseMoved(NSEvent theEvent)
 		{
-			var msg = TranslateMouseCore(theEvent, out bool client);
-			if (driver.LastEnteredHwnd != view.Handle && driver.Grab.Hwnd == IntPtr.Zero)
-				return;
-			if (driver.Grab.Hwnd != IntPtr.Zero)
-				msg.hwnd = driver.Grab.Hwnd;
+			var msg = TranslateMouseCore(theEvent, out bool client, MouseTarget());
 			msg.wParam = (IntPtr)theEvent.ModifierFlags.ToWParam();
 			msg.message = client ? Msg.WM_MOUSEMOVE : Msg.WM_NCMOUSEMOVE;
 			Application.SendMessage(ref msg);
@@ -236,7 +246,9 @@ namespace System.Windows.Forms.CocoaInternal
 
 		internal void TranslateMouseDragged(NSEvent e, MsgButtons button)
 		{
-			var msg = TranslateMouseCore(e, out bool client);
+			// Dragging events get delivered to the view where dragging started.
+			// We have to redirect them to the view under the cursor (maybe in another window).
+			var msg = TranslateMouseCore(e, out bool client, MouseTarget());
 			msg.wParam = (IntPtr)(e.ModifierFlags.ToWParam() | (uint)button);
 			msg.message = client ? Msg.WM_MOUSEMOVE : Msg.WM_NCMOUSEMOVE;
 			Application.SendMessage(ref msg);
@@ -256,28 +268,37 @@ namespace System.Windows.Forms.CocoaInternal
 			}
 		}
 
-		internal MSG TranslateMouseCore(NSEvent e, out bool client)
+		internal MSG TranslateMouseCore(NSEvent e, out bool isClient, NSView target = null)
 		{
-			var clientView = view as IClientView;
-			var nspoint = view.ConvertPointFromView(e.LocationInWindow, null);
-			var localMonoPoint = driver.NativeToMonoFramed(nspoint, view);
-			var clientRect = clientView.ClientBounds.ToRectangle();
-
-			if ((clientView != null && clientRect.Contains(localMonoPoint)) || driver.Grab.Hwnd != IntPtr.Zero)
+			var window = e.Window;
+			var locationInWindow = e.LocationInWindow;
+			if (target != null && target.Window != null)
 			{
-				client = true;
+				locationInWindow = target.Window.ConvertPointFromScreen(window.ConvertPointToScreen(locationInWindow));
+				window = target.Window;
+			}
+			else target = view;
+
+			var client = target as IClientView;
+			var nspoint = target.ConvertPointFromView(locationInWindow, null);
+			var localMonoPoint = driver.NativeToMonoFramed(nspoint, target);
+			var clientRect = client.ClientBounds.ToRectangle();
+
+			if ((client != null && clientRect.Contains(localMonoPoint)) || driver.Grab.Hwnd != IntPtr.Zero)
+			{
+				isClient = true;
 				localMonoPoint.Offset(-clientRect.X, -clientRect.Y);
 			}
-			else client = false;
+			else isClient = false;
 
 			return new MSG
 			{
-				hwnd = view.Handle,
+				hwnd = target.Handle,
 				lParam = (IntPtr)(localMonoPoint.Y << 16 | (localMonoPoint.X & 0xFFFF)),
-				pt = e.Window == null
+				pt = window == null
 					? driver.NativeToMonoScreen(NSEvent.CurrentMouseLocation).ToPOINT()
-					: driver.NativeToMonoScreen(e.Window.ConvertBaseToScreen(e.LocationInWindow)).ToPOINT(),
-				refobject = view
+					: driver.NativeToMonoScreen(window.ConvertPointToScreen(locationInWindow)).ToPOINT(),
+				refobject = target
 			};
 		}
 

@@ -1,4 +1,4 @@
-//
+﻿//
 //MonoView.cs
 // 
 //Author:
@@ -226,6 +226,11 @@ namespace System.Windows.Forms.CocoaInternal
 		public override void MouseMoved(NSEvent theEvent)
 		{
 			eventResponder.MouseMoved(theEvent);
+		}
+
+		public override void MouseDragged(NSEvent theEvent)
+		{
+			eventResponder.MouseDragged(theEvent);
 		}
 
 		public override void MouseDown(NSEvent theEvent)

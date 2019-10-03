@@ -584,6 +584,11 @@ namespace System.Windows.Forms
 			foreach (var item in this.Items)
 				useNativeMenu &= item is ToolStripMenuItem || item is ToolStripSeparator;
 
+			// Prevent closing native menus by the Application object - it would be too early, in MouseDown.
+			// Native menus will close automatically, *after MouseUp*. This way, we can handle both
+			// ways of selecting the item: mouse_down-move-mouse_up and click-move-click.
+			ToolStripManager.DismissingHandledNatively = useNativeMenu;
+
 			if (useNativeMenu)
 			{
 				currentMenu = ToNSMenu();

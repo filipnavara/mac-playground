@@ -1023,6 +1023,10 @@ namespace System.Windows.Forms
 							goto default;
 						}
 
+						// Native menus have their own closing mechanism.
+						if (ToolStripManager.DismissingHandledNatively)
+							goto default;
+
 						// Close any active toolstrips drop-downs if we click outside of them,
 						// but also don't close them all if we click outside of the top-most
 						// one, but into its owner.

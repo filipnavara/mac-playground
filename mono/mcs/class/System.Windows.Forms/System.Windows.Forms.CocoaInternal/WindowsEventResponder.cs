@@ -176,7 +176,7 @@ namespace System.Windows.Forms.CocoaInternal
 			var msg = TranslateMouseCore(e, out bool client);
 			msg.wParam = (IntPtr)(e.ModifiersToWParam() | e.ButtonNumberToWParam());
 
-			if (e.ClickCount > 1 && prevMouseDown?.Type == e.Type)
+			if (e.ClickCount > 1 && (e.ClickCount & 1) == 0 && prevMouseDown?.Type == e.Type)
 				msg.message = (client ? Msg.WM_LBUTTONDBLCLK : Msg.WM_NCLBUTTONDBLCLK) + MsgOffset4Button(e);
 			else
 			{

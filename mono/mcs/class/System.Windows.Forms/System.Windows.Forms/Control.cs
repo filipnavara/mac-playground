@@ -1663,10 +1663,10 @@ namespace System.Windows.Forms
 		internal virtual void HandleClick(int clicks, MouseEventArgs me) {
 			bool standardclick = GetStyle (ControlStyles.StandardClick);
 			bool standardclickclick = GetStyle (ControlStyles.StandardDoubleClick);
-			if ((clicks > 1) && standardclick && standardclickclick) {
+			if (clicks > 1 && (clicks & 1) == 0 && standardclick && standardclickclick) {
 				OnDoubleClick (me);
 				OnMouseDoubleClick (me);
-			} else if (clicks == 1 && standardclick && !ValidationFailed) {
+			} else if ((clicks & 1) == 1 && standardclick && !ValidationFailed) {
 				OnClick (me);
 				OnMouseClick (me);
 			}

@@ -437,6 +437,19 @@ namespace System.Windows.Forms.CocoaInternal
 		{
 			try
 			{
+				if (!driver.draggingSource.Cancelled)
+				{
+					var source = Control.FromHandle(driver.draggingSource.ViewHandle);
+					var args = new QueryContinueDragEventArgs(0, false, DragAction.Continue);
+					source?.DndContinueDrag(args);
+					if (args.Action == DragAction.Cancel)
+					{
+						// It seems there is no way to cancel dragging on macOS.
+						// Anyway, we have to stop sending QueryContinue events.
+						driver.draggingSource.Cancelled = true;
+					}
+				}
+
 				var control = Control.FromHandle(Handle);
 				if (null != control && control.AllowDrop)
 				{

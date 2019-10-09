@@ -77,11 +77,14 @@ namespace System.Windows.Forms
 					DraggingEffects = DragDropEffects.None;
 					try
 					{
+						draggingSource.Cancelled = false;
+						draggingSource.ViewHandle = handle;
 						draggingSession = view.BeginDraggingSession(items, LastMouseDown, draggingSource);
 						DoEvents();
 					}
 					finally
 					{
+						draggingSource.ViewHandle = IntPtr.Zero;
 						draggingSession = null;
 					}
 					return DraggingEffects;
@@ -327,6 +330,9 @@ namespace System.Windows.Forms
 
 		internal class DraggingSource : NSDraggingSource
 		{
+			public IntPtr ViewHandle { get; internal set; }
+			public bool Cancelled { get; internal set; }
+
 			public override void DraggedImageBeganAt(NSImage image, CGPoint screenPoint)
 			{
 				//Console.WriteLine("DraggingSource.DraggedImageBeganAt");

@@ -98,6 +98,8 @@ namespace System.Windows.Forms.CocoaInternal
 			{
 				if (ContentView is MonoView monoView)
 				{
+					if (IsKeyWindow)
+						return true;
 					if (lastEventType == NSEventType.LeftMouseDown && (mouseActivate == MouseActivate.MA_NOACTIVATE || mouseActivate == MouseActivate.MA_NOACTIVATEANDEAT))
 						return false;
 					if (0 != (monoView.ExStyle & WindowExStyles.WS_EX_NOACTIVATE))

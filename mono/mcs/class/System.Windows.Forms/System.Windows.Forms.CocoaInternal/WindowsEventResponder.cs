@@ -25,7 +25,7 @@ namespace System.Windows.Forms.CocoaInternal
 		XplatUICocoa driver;
 		internal NSView view;
 
-		internal double preciseDeltaScale = 5.0;
+		internal double preciseDeltaScale = 1.0;
 		internal double rawDeltaScale = 40.0;
 
 		// For emulating MouseUp in ToolStripDropDown when using native menu (that swallows it):

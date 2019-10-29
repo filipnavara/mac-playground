@@ -105,11 +105,13 @@ namespace System.Windows.Forms.CocoaInternal
 
 			// While dragging, both e.Window and e.WindowNumber relate to the window in which the dragging session started,
 			// but e.LocationInWindow always contains the location relative to the window under the cursor!
-			var num = NSWindow.WindowNumberAtPoint(NSEvent.CurrentMouseLocation, 0);
-			var window = NSApplication.SharedApplication.WindowWithWindowNumber(num) ?? e.Window;
+			var location = NSEvent.CurrentMouseLocation;
+			var number = NSWindow.WindowNumberAtPoint(location, 0);
+			var window = NSApplication.SharedApplication.WindowWithWindowNumber(number) ?? e.Window;
+			var locationInWindow = window.ConvertPointFromScreen(location);
 
 			var msg = TranslateMouseCore(e, out bool client);
-			var newMouseView = window?.ContentView.HitTest(e.LocationInWindow) ?? window?.ContentView.Superview?.HitTest(e.LocationInWindow);
+			var newMouseView = window?.ContentView.HitTest(locationInWindow) ?? window?.ContentView.Superview?.HitTest(locationInWindow);
 			var newMouseViewHandle = newMouseView is MonoView ? newMouseView.Handle : IntPtr.Zero;
 
 #if DEBUG_MOUSE_ENTER_EXIT
@@ -257,11 +259,20 @@ namespace System.Windows.Forms.CocoaInternal
 		public override void ScrollWheel(NSEvent e)
 		{
 			var msg = TranslateMouseCore(e, out bool _);
-			bool horizontal = e.ScrollingDeltaY == 0 && e.ScrollingDeltaX != 0;
-			int delta = ScaleAndQuantizeDelta((float)(horizontal ? -e.ScrollingDeltaX : e.ScrollingDeltaY), e.HasPreciseScrollingDeltas);
-			if (delta != 0 && e.Phase == NSEventPhase.None && e.MomentumPhase == NSEventPhase.None || e.Phase == NSEventPhase.Changed || e.MomentumPhase == NSEventPhase.Changed)
+
+			if (Math.Abs(e.ScrollingDeltaY - nfloat.Epsilon) > 0)
 			{
-				msg.message = horizontal ? Msg.WM_MOUSEHWHEEL : Msg.WM_MOUSEWHEEL;
+				int delta = ScaleAndQuantizeDelta((float)e.ScrollingDeltaY, e.HasPreciseScrollingDeltas);
+				msg.message = Msg.WM_MOUSEWHEEL;
+				msg.wParam = (IntPtr)(((int)e.ModifiersToWParam() & 0xFFFF) | (delta << 16));
+				msg.lParam = (IntPtr)((msg.pt.x & 0xFFFF) | (msg.pt.y << 16));
+				Application.SendMessage(ref msg);
+			}
+
+			if (Math.Abs(e.ScrollingDeltaX - nfloat.Epsilon) > 0)
+			{
+				int delta = ScaleAndQuantizeDelta((float)-e.ScrollingDeltaX, e.HasPreciseScrollingDeltas);
+				msg.message = Msg.WM_MOUSEHWHEEL;
 				msg.wParam = (IntPtr)(((int)e.ModifiersToWParam() & 0xFFFF) | (delta << 16));
 				msg.lParam = (IntPtr)((msg.pt.x & 0xFFFF) | (msg.pt.y << 16));
 				Application.SendMessage(ref msg);

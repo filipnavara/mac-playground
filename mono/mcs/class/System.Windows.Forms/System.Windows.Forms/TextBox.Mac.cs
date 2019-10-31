@@ -212,7 +212,7 @@ namespace System.Windows.Forms {
 		{
 			base.OnGotFocus(e);
 
-			if (!has_been_focused)
+			if (!has_been_focused || this.IsRunningOnMac)
 			{
 				has_been_focused = true;
 

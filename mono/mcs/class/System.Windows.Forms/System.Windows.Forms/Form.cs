@@ -2312,6 +2312,9 @@ namespace System.Windows.Forms {
 			if (need_refresh && activated != null)
 				activated.Invalidate ();
 
+			if (control_activated && prev != activated && this.IsRunningOnMac && GetCreateParams().ClassName == "EDIT")
+				XplatUI.SendMessage(activated.Handle, Msg.WM_SELECT_ALL, IntPtr.Zero, IntPtr.Zero);
+
 			return control_activated;
 		}
 

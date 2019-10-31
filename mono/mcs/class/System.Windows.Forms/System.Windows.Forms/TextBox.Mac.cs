@@ -216,7 +216,7 @@ namespace System.Windows.Forms {
 			{
 				has_been_focused = true;
 
-				if (SelectionLength == 0 && Control.MouseButtons == MouseButtons.None)
+				if (SelectionLength == 0 && Text.Length != 0 && Control.MouseButtons == MouseButtons.None)
 					SelectAllNoScroll();
 			}
 		}

@@ -313,7 +313,8 @@ namespace System.Windows.Forms
 
 			internal virtual void Complete()
 			{
-				if (!completing 
+				if (!completing
+					&& owner.SelectionStart == owner.TextLength
 					&& owner.auto_complete_mode != AutoCompleteMode.None && owner.auto_complete_source == AutoCompleteSource.CustomSource && owner.auto_complete_custom_source != null
 					&& textField.StringValue.Length > 0 && owner.auto_complete_custom_source.Count != 0
 					&& textField.Window.FirstResponder is NSTextView textView)

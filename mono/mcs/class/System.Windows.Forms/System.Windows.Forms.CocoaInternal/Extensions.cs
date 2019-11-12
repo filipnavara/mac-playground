@@ -25,6 +25,25 @@ namespace System.Windows.Forms.Mac
 	{
 		static DateTime reference = new DateTime(2001, 1, 1, 0, 0, 0, 0, DateTimeKind.Utc);
 
+		public static NSMethodSignature GetMethodSignature(this NSObject obj, Selector selector)
+		{
+			var sig = LibObjc.IntPtr_objc_msgSend_IntPtr(obj.Handle, Selector.GetHandle("methodSignatureForSelector:"), selector.Handle);
+			return ObjCRuntime.Runtime.GetNSObject<NSMethodSignature>(sig);
+		}
+
+		public static NSInvocation ToInvocation(this NSMethodSignature signature)
+		{
+			var cls = Class.GetHandle(typeof(NSInvocation));
+			var ctor = Selector.GetHandle("invocationWithMethodSignature:");
+			var inv = LibObjc.IntPtr_objc_msgSend_IntPtr(cls, ctor, signature.Handle);
+			return ObjCRuntime.Runtime.GetNSObject<NSInvocation>(inv);
+		}
+
+		public static void SetArgument(this NSInvocation invocation, NSObject arg, int index)
+		{
+			LibObjc.void_objc_msgSend_IntPtr_nint(invocation.Handle, Selector.GetHandle("setArgument:atIndex:"), arg?.Handle ?? IntPtr.Zero, index);
+		}
+
 		public static uint ToFourCC(this string s)
 		{
 			return (((uint)s[0]) << 24 | ((uint)s[1]) << 16 | ((uint)s[2]) << 8 | ((uint)s[3]));

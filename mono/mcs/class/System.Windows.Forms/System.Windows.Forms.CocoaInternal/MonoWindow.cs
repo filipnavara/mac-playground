@@ -117,7 +117,6 @@ namespace System.Windows.Forms.CocoaInternal
 			}
 		}
 
-		IntPtr hitTestHandle = IntPtr.Zero;
 		MouseActivate mouseActivate = MouseActivate.MA_ACTIVATE;
 		NSEventType lastEventType = NSEventType.ApplicationDefined;
 		NSEvent currentEvent;
@@ -135,11 +134,9 @@ namespace System.Windows.Forms.CocoaInternal
 				case NSEventType.RightMouseDown:
 				case NSEventType.OtherMouseDown:
 				case NSEventType.BeginGesture:
-					hitTestHandle = (ContentView.Superview ?? ContentView).HitTest(theEvent.LocationInWindow)?.Handle ?? IntPtr.Zero;
-					if (!ToolStripManager.IsChildOfActiveToolStrip(hitTestHandle))
-						ToolStripManager.FireAppClicked();
+					if (!PreprocessMouseDown(theEvent))
+						return;
 					break;
-
 				case NSEventType.KeyUp:
 				case NSEventType.KeyDown:
 					// Emulation of ToolStrip's modal filter
@@ -177,18 +174,37 @@ namespace System.Windows.Forms.CocoaInternal
 					break;
 			}
 
-			if (theEvent.Type == NSEventType.LeftMouseDown)
-			{
-				var topLevelParent = IntPtr.Zero; // FIXME
-				mouseActivate = (MouseActivate)driver.SendMessage(ContentView.Handle, Msg.WM_MOUSEACTIVATE, topLevelParent, hitTestHandle).ToInt32();
-				if (mouseActivate == MouseActivate.MA_NOACTIVATEANDEAT)// || mouseActivate == MouseActivate.MA_ACTIVATEANDEAT)
-					return;
-			}
-
 			base.SendEvent(theEvent);
 			currentEvent = null;
 		}
 
+		// Returns true if processing should continue (base.SendEvent should be called), false if not
+		protected bool PreprocessMouseDown(NSEvent e)
+		{
+			bool hitTestCalled = false;
+			NSView hitTestView = null;
+
+			if (ToolStripManager.activeToolStrips.Count != 0)
+			{
+				hitTestCalled = true;
+				hitTestView = (ContentView.Superview ?? ContentView).HitTest(e.LocationInWindow);
+				if (hitTestView != null && !ToolStripManager.IsChildOfActiveToolStrip(hitTestView.Handle))
+					ToolStripManager.FireAppClicked();
+			}
+
+			if (e.Type == NSEventType.LeftMouseDown)
+			{
+				var topLevelParent = IntPtr.Zero; // FIXME
+				if (!hitTestCalled)
+					hitTestView = (ContentView.Superview ?? ContentView).HitTest(e.LocationInWindow);
+				var hitTestHandle = hitTestView?.Handle ?? IntPtr.Zero;
+				mouseActivate = (MouseActivate)driver.SendMessage(ContentView.Handle, Msg.WM_MOUSEACTIVATE, topLevelParent, hitTestHandle).ToInt32();
+				if (mouseActivate == MouseActivate.MA_NOACTIVATEANDEAT)// || mouseActivate == MouseActivate.MA_ACTIVATEANDEAT)
+					return false;
+			}
+
+			return true;
+		}
 		public override bool IsKeyWindow
 		{
 			// This allows WebView to change cursor when hovering over DOM nodes even if it's window is not key (pop-ups etc).

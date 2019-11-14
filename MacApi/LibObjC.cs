@@ -82,6 +82,12 @@ namespace MacApi
 		public static extern IntPtr bool_objc_msgSendSuper_IntPtr_IntPtr(IntPtr receiver, IntPtr selector, IntPtr arg1, IntPtr arg2);
 
 		[DllImport(libobjc, EntryPoint = objc_msgSend)]
+		public extern static bool bool_objc_msgSend_IntPtr_IntPtr_IntPtr(IntPtr receiver, IntPtr selector, IntPtr arg1, IntPtr arg2, IntPtr arg3);
+
+		[DllImport(libobjc, EntryPoint = objc_msgSendSuper)]
+		public static extern IntPtr bool_objc_msgSendSuper_IntPtr_IntPtr_IntPtr(IntPtr receiver, IntPtr selector, IntPtr arg1, IntPtr arg2, IntPtr arg3);
+
+		[DllImport(libobjc, EntryPoint = objc_msgSend)]
 		public extern static void void_objc_msgSend_IntPtr_IntPtr(IntPtr receiver, IntPtr selector, IntPtr arg1, IntPtr arg2);
 
 		[DllImport(libobjc, EntryPoint = objc_msgSend)]
@@ -121,6 +127,12 @@ namespace MacApi
 		public static extern IntPtr IntPtr_objc_msgSendSuper_IntPtr_IntPtr(IntPtr receiver, IntPtr selector, IntPtr arg1, IntPtr arg2);
 
 		[DllImport(libobjc, EntryPoint = objc_msgSend)]
+		public static extern IntPtr IntPtr_objc_msgSend_IntPtr_IntPtr_IntPtr(IntPtr receiver, IntPtr selector, IntPtr arg1, IntPtr arg2, IntPtr arg3);
+
+		[DllImport(libobjc, EntryPoint = objc_msgSendSuper)]
+		public static extern IntPtr IntPtr_objc_msgSendSuper_IntPtr_IntPtr_IntPtr(IntPtr receiver, IntPtr selector, IntPtr arg1, IntPtr arg2, IntPtr arg3);
+
+		[DllImport(libobjc, EntryPoint = objc_msgSend)]
 		public static extern IntPtr IntPtr_objc_msgSend_IntPtr_IntPtr_Int32(IntPtr receiver, IntPtr selector, IntPtr arg1, IntPtr arg2, Int32 arg3);
 
 		[DllImport(libobjc, EntryPoint = objc_msgSend)]
@@ -146,5 +158,11 @@ namespace MacApi
 
 		[DllImport(libobjc, EntryPoint = objc_msgSend)]
 		public static extern void void_objc_msgSend_Double(IntPtr receiver, IntPtr selector, double value);
+
+		[DllImport(libobjc, EntryPoint = objc_msgSend)]
+		public static extern void void_objc_msgSend_IntPtr_nint(IntPtr receiver, IntPtr selector, IntPtr arg1, nint arg2);
+
+		[DllImport(libobjc, EntryPoint = objc_msgSendSuper)]
+		public static extern void void_objc_msgSendSuper_IntPtr_nint(IntPtr receiver, IntPtr selector, IntPtr arg1, nint arg2);
 	}
 }

@@ -6953,13 +6953,15 @@ namespace System.Windows.Forms
 
 		internal class Focusing : IDisposable
 		{
+			public static bool Enabled = false; // Inactive by default (experimental, unsafe)
+
 			public static bool isActive;
 			bool wasActive;
 
 			public Focusing(bool active = true)
 			{
 				wasActive = isActive;
-				isActive = active;
+				isActive = active && Enabled;
 			}
 			public void Dispose()
 			{

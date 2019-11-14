@@ -668,25 +668,42 @@ namespace System.Windows.Forms {
 			return group.SelectNextControl(active_control, forward, false, false, true);
 		}
 
-		protected override bool ProcessMnemonic(char charCode) {
-			bool wrapped = false;
-			Control c = active_control;
+		bool is_processing_mnemonic;
 
-			do {
-				c = GetNextControl(c, true);
-				if (c != null) {
-					// This is stupid. I want to be able to call c.ProcessMnemonic directly
-					if (c.ProcessControlMnemonic(charCode)) {
-						return(true);
+		protected override bool ProcessMnemonic(char charCode) {
+
+			if (is_processing_mnemonic)
+				return false;
+
+			if (Controls.Count == 0)
+				return false;
+
+			Control start = ActiveControl;
+
+			is_processing_mnemonic = true;
+
+			try {
+				bool wrapped = false;
+				Control c = start;
+				do
+				{
+					c = GetNextControl(c, true);
+					if (c != null) {
+						// This is stupid. I want to be able to call c.ProcessMnemonic directly
+						if (c.ProcessControlMnemonic(charCode)) {
+							return(true);
+						}
+						continue;
+					} else {
+						if (wrapped) {
+							break;
+						}
+						wrapped = true;
 					}
-					continue;
-				} else {
-					if (wrapped) {
-						break;
-					}
-					wrapped = true;
-				}
-			} while (c != active_control);
+				} while (c != start);
+			} finally {
+				is_processing_mnemonic = false;
+			}
 
 			return false;
 		}

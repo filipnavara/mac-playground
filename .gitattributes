@@ -83,6 +83,7 @@ FormsTest/Controls/RunningDots.cs -text
 FormsTest/Entitlements.plist -text
 FormsTest/Extensions.cs -text
 FormsTest/Forms/AnimationsForm.cs -text
+FormsTest/Forms/DataGridForm.cs -text
 FormsTest/Forms/DebugLayoutForm.Designer.cs -text
 FormsTest/Forms/DebugLayoutForm.cs -text
 FormsTest/Forms/DebugLayoutForm.resx -text

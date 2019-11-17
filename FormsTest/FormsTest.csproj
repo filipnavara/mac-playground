@@ -12,7 +12,7 @@
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
     <DebugSymbols>true</DebugSymbols>
-    <OutputPath>bin\Debug\</OutputPath>
+    <OutputPath>..\..\..\bin\Debug</OutputPath>
     <PlatformTarget>anycpu</PlatformTarget>
     <CodeAnalysisRuleSet>MinimumRecommendedRules.ruleset</CodeAnalysisRuleSet>
     <WarningLevel>4</WarningLevel>
@@ -21,15 +21,15 @@
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Mono - Debug|AnyCPU' ">
     <Optimize>false</Optimize>
-    <OutputPath>bin\Mono - Debug</OutputPath>
+    <OutputPath>..\..\..\bin\Mono - Debug</OutputPath>
     <WarningLevel>4</WarningLevel>
     <DebugSymbols>true</DebugSymbols>
     <DefineConstants>DEBUG; NET_4_5; NET_4_0; MAC</DefineConstants>
     <AllowUnsafeBlocks>true</AllowUnsafeBlocks>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Xamarin - Debug|AnyCPU' ">
-    <Optimize>false</Optimize>
-    <OutputPath>bin\Xamarin - Debug</OutputPath>
+  	<Optimize>false</Optimize>
+    <OutputPath>..\..\..\bin\Xamarin - Debug</OutputPath>
     <WarningLevel>4</WarningLevel>
     <DebugSymbols>true</DebugSymbols>
     <DefineConstants>DEBUG; NET_4_5; NET_4_0; MAC;XAMARINMAC;__UNIFIED__</DefineConstants>
@@ -38,7 +38,7 @@
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Xamarin-Release|AnyCPU' ">
     <Optimize>true</Optimize>
-    <OutputPath>bin\Xamarin-Release</OutputPath>
+    <OutputPath>..\..\..\bin\Xamarin-Release</OutputPath>
     <WarningLevel>4</WarningLevel>
     <DebugSymbols>false</DebugSymbols>
     <DefineConstants>NET_4_5; NET_4_0; MAC;XAMARINMAC;__UNIFIED__;TRACE</DefineConstants>
@@ -47,15 +47,17 @@
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
     <Optimize>false</Optimize>
-    <OutputPath>bin\Release</OutputPath>
+    <OutputPath>..\..\..\bin\Release</OutputPath>
     <WarningLevel>4</WarningLevel>
     <AllowUnsafeBlocks>true</AllowUnsafeBlocks>
   </PropertyGroup>
   <PropertyGroup>
-    <UseCommonOutputDirectory>true</UseCommonOutputDirectory>
+<!--
+	<UseCommonOutputDirectory>true</UseCommonOutputDirectory>
     <IntermediateOutputPath>obj\$(Configuration)\$(MSBuildProjectName)\</IntermediateOutputPath>
     <OutputPath>bin\$(Configuration)\</OutputPath>
     <OutDir>$(OutputPath)</OutDir>
+-->
   </PropertyGroup>
   <ItemGroup>
     <Reference Include="System" />
@@ -249,6 +251,7 @@
     <Compile Include="Forms\MainForm.Swizzle.cs" />
     <Compile Include="Forms\MainForm.NSBackgroundActivity.cs" />
     <Compile Include="Forms\MainForm.NCPrefs.cs" />
+    <Compile Include="Forms\DataGridForm.cs" />
   </ItemGroup>
   <ItemGroup>
     <!--<EmbeddedResource Include="LayoutIssues\ImapOptions\ImapOptionsControl.resx">
@@ -354,6 +357,14 @@
       <HintPath>$(SolutionDir)\Dependencies\Mac\MonoMac.dll</HintPath>
     </Reference>
     <Reference Include="Xamarin.Mac" Condition=" '$(Configuration)' == 'Xamarin - Debug' or '$(Configuration)' == 'Xamarin-Release' " />
+    <ProjectReference Include="..\..\..\MailClient.Common.UI\MailClient.Common.UI.csproj">
+      <Project>{A0DA62D2-7D4D-43BA-BCA3-1DD3354C746C}</Project>
+      <Name>MailClient.Common.UI</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\..\..\MailClient.Collections\MailClient.Collections.csproj">
+      <Project>{C69A5715-2180-4C49-8AD0-150697A81790}</Project>
+      <Name>MailClient.Collections</Name>
+    </ProjectReference>
   </ItemGroup>
   <ItemGroup />
   <Import Project="$(MSBuildBinPath)\Microsoft.CSharp.targets" Condition=" '$(Configuration)' != 'Xamarin - Debug' and '$(Configuration)' != 'Xamarin-Release'" />

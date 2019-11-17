@@ -74,8 +74,8 @@ namespace FormsTest
 				"Přihlášení k webovému kalendáři",
 			    "Zadej url kalendáře, ke kterému se chceš přihlásit, třeba http://calndar.org-mycalndar.ics"
 			).Show(); });*/
-			AddButton("Layout 1", () => { new DebugLayoutForm().Show(); });
-			AddButton("Layout 2", () => { new DebugLayoutForm2().Show(); });
+			//AddButton("Layout 1", () => { new DebugLayoutForm().Show(); });
+			//AddButton("Layout 2", () => { new DebugLayoutForm2().Show(); });
 			//AddButton("Layout 3", () => { new DebugLayoutForm3().Show(); });
 			//AddButton("Layout 4", () => { new DebugLayoutForm4().Show(); });
 			/*AddButton("Editor", () =>
@@ -128,6 +128,7 @@ namespace FormsTest
 			AddButton("NSException", () => { NativeException(); });
 			AddButton("QuickLook panel", () => { ToggleQuickLookPanel(); });
 			AddButton("NC Preferences", () => { ReadNotificationCenterPreferences(); });
+			AddButton("Back color", () => { ChangeBackColor(); });
 #endif
 		}
 
@@ -283,6 +284,33 @@ namespace FormsTest
 		{
 			e.Cancel = true;
 			Visible = false;
+		}
+
+		AppKit.NSTitlebarAccessoryViewController tbc;
+		void ChangeBackColor()
+		{
+			var view = ObjCRuntime.Runtime.GetNSObject<AppKit.NSView>(Handle);
+			var window = view.Window;
+
+			if (!window.TitlebarAppearsTransparent)
+			{
+				window.TitlebarAppearsTransparent = true;
+				window.StyleMask |= AppKit.NSWindowStyle.TexturedBackground;
+				window.BackgroundColor = AppKit.NSColor.Red;
+
+				//var box = new AppKit.NSBox(CoreGraphics.CGRect.FromLTRB(0, 0, 100, 20));
+				//box.FillColor = AppKit.NSColor.Clear;
+				//tbc = new AppKit.NSTitlebarAccessoryViewController();
+				//tbc.View = box;
+				//window.AddTitlebarAccessoryViewController(tbc);
+			}
+			else
+			{
+				window.TitlebarAppearsTransparent = false;
+				window.StyleMask &= ~AppKit.NSWindowStyle.TexturedBackground;
+				window.BackgroundColor = AppKit.NSColor.WindowBackground;
+				//window.RemoveTitlebarAccessoryViewControllerAtIndex(0);
+			}
 		}
 	}
 }

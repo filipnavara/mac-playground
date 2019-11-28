@@ -93,6 +93,12 @@ namespace System.Windows.Forms.CocoaInternal
 			if (base.SendAction(theAction, theTarget, sender))
 				return true;
 
+			// FIXME
+			// The following code should not be necessary, it should have been done by base. What am I missing?
+			// It's here to make autocompletion work properly:
+			// Without this, double clicking a word in a completion list of a text field (initial wizard) does not work.
+
+			if (theAction.Name == "tableAction:") // Prevent crashes when used with certain other selectors.
 			if (theTarget != null && theTarget.RespondsToSelector(theAction))
 			{
 				try

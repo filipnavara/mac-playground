@@ -112,7 +112,13 @@ namespace System.Windows.Forms.CocoaInternal
 
 			var msg = TranslateMouseCore(e, out bool client);
 			var newMouseView = window?.ContentView.HitTest(locationInWindow) ?? window?.ContentView.Superview?.HitTest(locationInWindow);
-			var newMouseViewHandle = newMouseView is MonoView ? newMouseView.Handle : IntPtr.Zero;
+			var newMouseViewHandle = newMouseView is MonoView || newMouseView is IMacNativeControl ? newMouseView.Handle : IntPtr.Zero;
+			if (newMouseViewHandle == IntPtr.Zero && newMouseView != null)
+			{
+				var c = Control.FromChildHandle(newMouseView.Handle);
+				if (c != null)
+					newMouseViewHandle = c.Handle;
+			}
 
 #if DEBUG_MOUSE_ENTER_EXIT
 			{
@@ -290,17 +296,24 @@ namespace System.Windows.Forms.CocoaInternal
 			}
 			else target = view;
 
-			var client = target as IClientView;
 			var nspoint = target.ConvertPointFromView(locationInWindow, null);
 			var localMonoPoint = driver.NativeToMonoFramed(nspoint, target);
-			var clientRect = client.ClientBounds.ToRectangle();
 
-			if ((client != null && clientRect.Contains(localMonoPoint)) || driver.Grab.Hwnd != IntPtr.Zero)
+			isClient = false;
+			if (target is IClientView client)
 			{
-				isClient = true;
-				localMonoPoint.Offset(-clientRect.X, -clientRect.Y);
+				var clientRect = client.ClientBounds.ToRectangle();
+				if (clientRect.Contains(localMonoPoint) || driver.Grab.Hwnd != IntPtr.Zero)
+				{
+					isClient = true;
+					localMonoPoint.Offset(-clientRect.X, -clientRect.Y);
+				}
 			}
-			else isClient = false;
+			else
+			{
+				if (!(target is MonoView))
+					isClient = true;
+			}
 
 			return new MSG
 			{

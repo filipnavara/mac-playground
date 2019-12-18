@@ -42,7 +42,7 @@ namespace System.Windows.Forms
 				var size = owner.Bounds.Size;
 
 				using (var restore = new NSControlSetCellClass(typeof(NSTextField), typeof(TextFieldCell)))
-					textField = new NSTextField(new CGRect(0, 0, size.Width, size.Height));
+					textField = new TextField(new CGRect(0, 0, size.Width, size.Height));
 
 				textField.TextShouldBeginEditing = TextFieldShouldBeginEditing;
 				textField.Changed += TextFieldChanged;
@@ -234,6 +234,14 @@ namespace System.Windows.Forms
 					range.Length = length;
 					textField.CurrentEditor.SelectedRange = range;
 				}
+				else
+				{
+					if (textField is TextField tfield)
+					{
+						tfield.preSelectionStart = start;
+						tfield.preSelectionLength = length;
+					}
+				}
 			}
 
 			public virtual void SelectAll()
@@ -292,6 +300,12 @@ namespace System.Windows.Forms
 			{
 				if (textField != null && value != null)
 					textField.StringValue = value;
+			}
+
+			internal virtual void ApplySelection(int preSelectStart, int preSelectLength)
+			{
+				if (preSelectLength != -1 && preSelectStart != -1)
+					Select(preSelectStart, preSelectLength);
 			}
 
 			internal virtual void ApplyFormatter(NSFormatter formatter)
@@ -443,6 +457,33 @@ namespace System.Windows.Forms
 					return false;
 				}
 			}
+		}
+	}
+
+	internal class TextField : NSTextField
+	{
+		public int preSelectionStart = -1;
+		public int preSelectionLength = -1;
+
+		public TextField(CGRect frame) : base (frame)
+		{
+		}
+
+		public TextField(IntPtr handle) : base(handle)
+		{
+		}
+
+		public override bool BecomeFirstResponder()
+		{
+			var result = base.BecomeFirstResponder();
+
+			if (result && preSelectionStart != -1 && preSelectionLength != -1 && CurrentEditor != null)
+			{
+				CurrentEditor.SelectedRange = new NSRange { Location = preSelectionStart, Length = preSelectionLength };
+				preSelectionStart = preSelectionLength = -1;
+			}
+
+			return result;
 		}
 	}
 }

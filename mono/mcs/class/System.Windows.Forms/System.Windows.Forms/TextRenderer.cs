@@ -465,6 +465,8 @@ namespace System.Windows.Forms
 			if ((flags & TextFormatFlags.NoClipping) == TextFormatFlags.NoClipping)
 				sf.FormatFlags |= StringFormatFlags.NoClip;
 
+			sf.FormatFlags |= StringFormatFlags.MeasureTrailingSpaces;
+
 			return sf;
 		}
 

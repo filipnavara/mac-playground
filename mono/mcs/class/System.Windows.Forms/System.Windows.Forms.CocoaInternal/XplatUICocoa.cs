@@ -1396,8 +1396,8 @@ namespace System.Windows.Forms {
 			{
 				var lparam = IntPtr.Zero; // TODO: should contain mouse coords? See WindowsEventResponder.TranslateMouseEvent()
 				var wparam = (IntPtr)(NSEvent.CurrentModifierFlags.ToWParam() | Mac.Extensions.ButtonMaskToWParam(NSEvent.CurrentPressedMouseButtons));
-				SendMessage(LastEnteredHwnd, Msg.WM_MOUSELEAVE, wparam, lparam);
-				SendMessage(handle, Msg.WM_MOUSE_ENTER, wparam, lparam);
+				//SendMessage(LastEnteredHwnd, Msg.WM_MOUSELEAVE, wparam, lparam);
+				//SendMessage(handle, Msg.WM_MOUSE_ENTER, wparam, lparam);
 			}
 
 			Grab.Hwnd = handle;
@@ -1426,8 +1426,8 @@ namespace System.Windows.Forms {
 				{
 					var lparam = IntPtr.Zero; // TODO: should contain mouse coords? See WindowsEventResponder.TranslateMouseEvent()
 					var wparam = (IntPtr)(NSEvent.CurrentModifierFlags.ToWParam() | Mac.Extensions.ButtonMaskToWParam(NSEvent.CurrentPressedMouseButtons));
-					SendMessage(grabbed, Msg.WM_MOUSELEAVE, wparam, lparam);
-					SendMessage(LastEnteredHwnd, Msg.WM_MOUSE_ENTER, wparam, lparam);
+					//SendMessage(grabbed, Msg.WM_MOUSELEAVE, wparam, lparam);
+					//SendMessage(LastEnteredHwnd, Msg.WM_MOUSE_ENTER, wparam, lparam);
 				}
 			}
 		}
@@ -2014,7 +2014,7 @@ namespace System.Windows.Forms {
 					winWrap.MakeFirstResponder(vuWrap.Superview ?? winWrap.ContentView);
 			}
 
-			if (visible)
+			//if (visible)
 				SendMessage(handle, Msg.WM_WINDOWPOSCHANGED, IntPtr.Zero, IntPtr.Zero);
 
 			return true;

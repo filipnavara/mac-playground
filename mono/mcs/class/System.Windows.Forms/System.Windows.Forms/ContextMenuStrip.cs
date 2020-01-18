@@ -35,18 +35,15 @@ namespace System.Windows.Forms
 	[DefaultEvent ("Opening")]
 	public class ContextMenuStrip : ToolStripDropDownMenu
 	{
-		Control source_control;
 		internal Control container;
 
 		#region Public Construtors
 		public ContextMenuStrip () : base ()
 		{
-			source_control = null;
 		}
 		
 		public ContextMenuStrip (IContainer container) : base ()
 		{
-			source_control = null;
 		}
 		#endregion
 
@@ -71,10 +68,5 @@ namespace System.Windows.Forms
 				XplatUI.SetTopmost (this.Handle, true);
 		}
 		#endregion
-
-		internal void SetSourceControl (Control source_control)
-		{
-			container = this.source_control = source_control;
-		}
 	}
 }

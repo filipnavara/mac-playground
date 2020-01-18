@@ -51,6 +51,7 @@ namespace System.Windows.Forms
 		private bool drop_shadow_enabled = true;
 		private double opacity = 1D;
 		private ToolStripItem owner_item;
+		internal Control source_control = null;
 
 		#region Public Constructor
 		public ToolStripDropDown () : base ()
@@ -570,6 +571,8 @@ namespace System.Windows.Forms
 			if (Visible)
 				return;
 
+			SetSourceControl(control);
+
 			CancelEventArgs e = new CancelEventArgs();
 			this.OnOpening(e);
 
@@ -1007,6 +1010,12 @@ namespace System.Windows.Forms
 		#endregion
 
 		#region Private Methods
+
+		internal void SetSourceControl(Control control)
+		{
+			source_control = control;
+		}
+
 		internal override void Dismiss (ToolStripDropDownCloseReason reason)
 		{
 			this.Close (reason);

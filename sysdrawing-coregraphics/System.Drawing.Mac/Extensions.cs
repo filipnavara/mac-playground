@@ -186,6 +186,7 @@ namespace System.Drawing.Mac
 			return NSColor.FromDeviceRgba(r, g, b, a);
 		}
 
+		// The following methods are here because equivalent Xamarin stubs have redundant EnsureUIThread assertions that make them unusable for us.
 		static IntPtr selGenericRgbColorSpace;
 		public static NSColorSpace GenericRgbColorSpace()
 		{
@@ -193,6 +194,16 @@ namespace System.Drawing.Mac
 				selGenericRgbColorSpace = ObjCRuntime.Selector.GetHandle("genericRGBColorSpace");
 			var classHandle = ObjCRuntime.Class.GetHandle(typeof(NSColorSpace));
 			var handle = MacApi.LibObjc.IntPtr_objc_msgSend(classHandle, selGenericRgbColorSpace);
+			return (NSColorSpace)ObjCRuntime.Runtime.GetNSObject(handle);
+		}
+
+		static IntPtr selSRGBColorSpace;
+		public static NSColorSpace SRGBColorSpace()
+		{
+			if (selSRGBColorSpace == IntPtr.Zero)
+				selSRGBColorSpace = ObjCRuntime.Selector.GetHandle("sRGBColorSpace");
+			var classHandle = ObjCRuntime.Class.GetHandle(typeof(NSColorSpace));
+			var handle = MacApi.LibObjc.IntPtr_objc_msgSend(classHandle, selSRGBColorSpace);
 			return (NSColorSpace)ObjCRuntime.Runtime.GetNSObject(handle);
 		}
 
@@ -221,17 +232,36 @@ namespace System.Drawing.Mac
 		public static bool ToArgb(this NSColor color, out int a, out int r, out int g, out int b)
 		{
 			var result = ToArgb(color, out float af, out float rf, out float gf, out float bf);
-			a = (int)(af * 255);
-			r = (int)(rf * 255);
-			g = (int)(gf * 255);
-			b = (int)(bf * 255);
+			a = (int)Math.Round(af * 255);
+			r = (int)Math.Round(rf * 255);
+			g = (int)Math.Round(gf * 255);
+			b = (int)Math.Round(bf * 255);
 			return result;
 		}
 
 		public static bool ToArgb(this NSColor color, out float a, out float r, out float g, out float b)
 		{
-			NSColor rgba = color.UsingColorSpace(GenericRgbColorSpace());
-			if (rgba != null)
+			var cgc = color.CGColor; // 10.8+
+			if (cgc != null)
+			{
+				if (cgc.NumberOfComponents == 4 && cgc.ColorSpace.Name == CGColorSpaceNames.SRGB)
+				{
+					r = (float)cgc.Components[0];
+					g = (float)cgc.Components[1];
+					b = (float)cgc.Components[2];
+					a = (float)cgc.Components[3];
+					return true;
+				}
+
+				if (cgc.NumberOfComponents == 2 && cgc.ColorSpace.Name == CGColorSpaceNames.LinearGray)
+				{
+					a = (float)cgc.Components[1];
+					r = g = b = (float)cgc.Components[0];
+					return true;
+				}
+			}
+
+			if (color.UsingColorSpace(SRGBColorSpace()) is NSColor rgba)
 			{
 				rgba.GetRgba(out nfloat nr, out nfloat ng, out nfloat nb, out nfloat na);
 				a = (float)na;
@@ -239,26 +269,6 @@ namespace System.Drawing.Mac
 				g = (float)ng;
 				b = (float)nb;
 				return true;
-			}
-
-			var cgc = color.CGColor; // 10.8+
-			if (cgc != null)
-			{
-				if (cgc.NumberOfComponents == 4)
-				{
-					a = (float)cgc.Components[3];
-					r = (float)cgc.Components[0];
-					g = (float)cgc.Components[1];
-					b = (float)cgc.Components[2];
-					return true;
-				}
-
-				if (cgc.NumberOfComponents == 2)
-				{
-					a = (float)cgc.Components[1];
-					r = g = b = (float)cgc.Components[0];
-					return true;
-				}
 			}
 
 			a = r = g = b = 0;

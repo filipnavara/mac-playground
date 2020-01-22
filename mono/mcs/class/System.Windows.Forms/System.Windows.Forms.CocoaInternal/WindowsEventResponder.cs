@@ -224,7 +224,7 @@ namespace System.Windows.Forms.CocoaInternal
 		{
 			if (driver.Grab.Hwnd.ToNSObject() is NSView grab)
 				return grab;
-			if (driver.LastEnteredHwnd.ToNSObject() is NSView hover)
+			if (ObjCRuntime.Runtime.TryGetNSObject(driver.LastEnteredHwnd) is NSView hover)
 				return hover;
 			return null;
 		}

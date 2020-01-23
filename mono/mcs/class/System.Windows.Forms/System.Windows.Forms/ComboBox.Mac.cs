@@ -1709,12 +1709,14 @@ namespace System.Windows.Forms
 					if (title.StartsWith(prefix, StringComparison.CurrentCultureIgnoreCase))
 					{
 						indexofCompleted = i;
+						BeginInvokeOnMainThread(() => { DidCallCompletedString(prefix, indexofCompleted); });
 						return title;
 					}
 					++i;
 				}
 
 				indexofCompleted = -1;
+				BeginInvokeOnMainThread(() => { DidCallCompletedString(prefix, indexofCompleted); });
 				return prefix;
 			}
 
@@ -1731,7 +1733,13 @@ namespace System.Windows.Forms
 				}
 				index = -1;
 				return completions.ToArray();
+			}
 
+			protected virtual void DidCallCompletedString(string prefix, int indexOfCompleted)
+			{
+				// Open pop-up with auto completions, if completion found
+				if (indexOfCompleted != -1 && combo.Cell != null && !combo.Cell.AccessibilityExpanded)
+					combo.Cell.AccessibilityExpanded = true;
 			}
 		}
 	}

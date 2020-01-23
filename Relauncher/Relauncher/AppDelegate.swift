@@ -39,7 +39,7 @@ class AppDelegate: NSObject, NSApplicationDelegate {
         let args = ProcessInfo.processInfo.arguments
         if args.count > 2 {
             if let pid = Int(args[1]) {
-                for app in NSWorkspace.shared().runningApplications {
+                for app in NSWorkspace.shared.runningApplications {
                     if pid == Int(app.processIdentifier) {
                         startWaitingForTermination(app, bundleId: args[2])
                         terminate = false
@@ -68,12 +68,12 @@ class AppDelegate: NSObject, NSApplicationDelegate {
         }
     }
     
-    func onTimer() {
+    @objc func onTimer() {
         if runningApp!.isTerminated {
             timer!.invalidate()
 
             if let bundleId = launchAppBundleId {
-                NSWorkspace.shared().launchApplication(withBundleIdentifier:bundleId, options:[], additionalEventParamDescriptor:nil, launchIdentifier:nil)
+                NSWorkspace.shared.launchApplication(withBundleIdentifier:bundleId, options:[], additionalEventParamDescriptor:nil, launchIdentifier:nil)
             }
             
             NSApp.terminate(self)

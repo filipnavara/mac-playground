@@ -1511,6 +1511,9 @@ namespace System.Windows.Forms
 				this.owner = owner;
 
 				combo = new NSComboBox();
+				combo.Bordered = false;
+				combo.UsesSingleLineMode = false;
+				combo.LineBreakMode = NSLineBreakMode.Clipping;
 				combo.BezelStyle = NSTextFieldBezelStyle.Rounded;
 				combo.Alignment = NSTextAlignment.Natural;
 				combo.Enabled = owner.Enabled;

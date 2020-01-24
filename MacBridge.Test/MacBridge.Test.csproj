@@ -38,6 +38,7 @@
     <ConsolePause>false</ConsolePause>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Xamarin - Debug|AnyCPU' ">
+    <IncludeXamarinMac>true</IncludeXamarinMac>
     <DebugSymbols>true</DebugSymbols>
     <DebugType>full</DebugType>
     <Optimize>false</Optimize>
@@ -48,6 +49,7 @@
     <ConsolePause>false</ConsolePause>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Xamarin-Release|AnyCPU' ">
+    <IncludeXamarinMac>true</IncludeXamarinMac>
     <DebugSymbols>false</DebugSymbols>
     <DebugType>none</DebugType>
     <Optimize>true</Optimize>

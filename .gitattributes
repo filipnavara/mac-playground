@@ -179,6 +179,7 @@ FormsTestApp/ViewController.designer.cs -text
 MacApi/AppKit/NSApplication.cs -text
 MacApi/AppKit/NSTitlebarAccessoryViewController.cs -text
 MacApi/AppKit/NSWorkspace.cs -text
+MacApi/Carbon/TextInputSource.cs -text
 MacApi/Constants.cs -text
 MacApi/CoreFoundation/CFArray.cs -text
 MacApi/CoreFoundation/CFBoolean.cs -text

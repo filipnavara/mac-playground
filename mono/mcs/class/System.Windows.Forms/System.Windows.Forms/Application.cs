@@ -141,7 +141,7 @@ namespace System.Windows.Forms
 		}
 
 		private static bool browser_embedded;
-		private static InputLanguage input_language = InputLanguage.CurrentInputLanguage;
+		private static InputLanguage input_language;
 		private static string safe_caption_format = "{1} - {0} - {2}";
 		private static readonly ArrayList message_filters = new ArrayList();
 		private static readonly FormCollection forms = new FormCollection ();
@@ -297,6 +297,8 @@ namespace System.Windows.Forms
 
 		public static InputLanguage CurrentInputLanguage {
 			get {
+				if (input_language == null)
+					input_language = InputLanguage.CurrentInputLanguage;
 				return input_language;
 			}
 			set {

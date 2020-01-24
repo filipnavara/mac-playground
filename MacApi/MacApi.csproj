@@ -78,6 +78,7 @@
     <Compile Include="PrintCore\PMDestinationType.cs" />
     <Compile Include="PrintCore\PMDocumentFormat.cs" />
     <Compile Include="PrintCore\PMPrinter.cs" />
+    <Compile Include="Carbon\TextInputSource.cs" />
     <Compile Include="Foundation\NSBackgroundActivityScheduler.cs" />
     <Compile Include="Foundation\NotificationCenterPreferences.cs" />
     <Compile Include="CoreGraphics\Quartz.cs" />
@@ -95,6 +96,8 @@
     <Folder Include="Foundation\" />
     <Folder Include="Posix\" />
     <Folder Include="PrintCore\" />
+    <Folder Include="Carbon\" />
+    <Folder Include="CoreFoundation\" />
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Constants.cs" />

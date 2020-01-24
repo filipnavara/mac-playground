@@ -27,6 +27,13 @@
 // NOT COMPLETE
 
 using System.Globalization;
+using System.Collections.Generic;
+
+#if XAMARINMAC
+using MacApi.Carbon;
+#elif MONOMAC
+using MacApi.Carbon;
+#endif
 
 namespace System.Windows.Forms {
 	public sealed class InputLanguage {
@@ -72,7 +79,41 @@ namespace System.Windows.Forms {
 				return default_input;
 			}
 		}
+#if __MACOS__
+		public static InputLanguageCollection InstalledInputLanguages {
+			get
+			{
+				if (all == null)
+				{
+					var ils = new List<InputLanguage>();
+					var sources = TextInputSource.List();
+					foreach (var source in sources)
+					{
+						try
+						{
+							if (source.Category == TextInputSource.kTISCategoryKeyboardInputSource && source.Type == TextInputSource.kTISTypeKeyboardLayout)
+							{
+								var lang = source.FirstLanguage;
+								var culture = CultureInfo.GetCultureInfo(lang);
+								var il = new InputLanguage(IntPtr.Zero, culture, source.LocalizedName);
+								ils.Add(il);
+							}
+						}
+						catch 
+						{
+						}
+					}
 
+					if (ils.Count == 0)
+						ils.Add(new InputLanguage(IntPtr.Zero, new CultureInfo(string.Empty), "U.S."));
+
+					all = new InputLanguageCollection(ils.ToArray());
+				}
+
+				return all;
+			}
+		}
+#else
 		public static InputLanguageCollection InstalledInputLanguages {
 			get {
 				if (all == null)
@@ -81,7 +122,8 @@ namespace System.Windows.Forms {
 				return all;
 			}
 		}
-		#endregion	// Public Static Properties
+#endif
+#endregion  // Public Static Properties
 
 		#region Public Instance Properties
 		public CultureInfo Culture {

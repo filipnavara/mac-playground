@@ -1,7 +1,6 @@
 ﻿using System;
 using System.Diagnostics;
 using NUnit.Framework;
-using MacBridge.CoreServices;
 #if XAMARINMAC
 using CoreGraphics;
 using Foundation;

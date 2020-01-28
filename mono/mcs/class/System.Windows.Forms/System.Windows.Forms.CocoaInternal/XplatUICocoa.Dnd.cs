@@ -128,9 +128,15 @@ namespace System.Windows.Forms
 			if (snapshot != null)
 			{
 				var size = ScaleToFit(snapshot.Size, maxSize);
-				var bounds = new CGRect(location.Move(-4, -4), size);
+				var bounds = new CGRect(location.Move(-8, -8), size);
+				int i = 0;
 				foreach (var item in items)
-					item.SetDraggingFrame(bounds, snapshot);
+				{
+					if (i++ == 0)
+						item.SetDraggingFrame(bounds, snapshot);
+					else
+						item.DraggingFrame = bounds;
+				}
 			}
 
 			return items.ToArray();

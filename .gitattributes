@@ -256,6 +256,7 @@ Relauncher/Relauncher.xcodeproj/project.xcworkspace/xcshareddata/Relauncher.xcsc
 Relauncher/Relauncher/AppDelegate.swift -text
 Relauncher/Relauncher/Base.lproj/MainMenu.xib -text
 Relauncher/Relauncher/Info.plist -text
+Relauncher/Relauncher/Relauncher.entitlements -text
 mono/mcs/build/common/ChangeLog -text
 mono/mcs/build/common/Consts.cs -text
 mono/mcs/build/common/Consts.cs.in -text

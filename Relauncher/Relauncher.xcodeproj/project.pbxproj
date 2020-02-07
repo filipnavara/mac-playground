@@ -12,6 +12,7 @@
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
+		639D0A1223EC695E000212AC /* RelauncherDebug.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; path = RelauncherDebug.entitlements; sourceTree = "<group>"; };
 		63EE9E1A1E8D5A8E0079D0A5 /* Relauncher.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = Relauncher.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		63EE9E1D1E8D5A8E0079D0A5 /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
 		63EE9E221E8D5A8E0079D0A5 /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.xib; name = Base; path = Base.lproj/MainMenu.xib; sourceTree = "<group>"; };
@@ -49,6 +50,7 @@
 		63EE9E1C1E8D5A8E0079D0A5 /* Relauncher */ = {
 			isa = PBXGroup;
 			children = (
+				639D0A1223EC695E000212AC /* RelauncherDebug.entitlements */,
 				A14627DE23E8323B00121587 /* Relauncher.entitlements */,
 				63EE9E1D1E8D5A8E0079D0A5 /* AppDelegate.swift */,
 				63EE9E211E8D5A8E0079D0A5 /* MainMenu.xib */,
@@ -89,8 +91,7 @@
 				TargetAttributes = {
 					63EE9E191E8D5A8E0079D0A5 = {
 						CreatedOnToolsVersion = 8.2.1;
-						DevelopmentTeam = 2ED6AKD5KA;
-						ProvisioningStyle = Manual;
+						ProvisioningStyle = Automatic;
 					};
 				};
 			};
@@ -258,12 +259,12 @@
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
-				CODE_SIGN_ENTITLEMENTS = Relauncher/Relauncher.entitlements;
-				CODE_SIGN_IDENTITY = "Developer ID Application";
-				CODE_SIGN_STYLE = Manual;
+				CODE_SIGN_ENTITLEMENTS = Relauncher/RelauncherDebug.entitlements;
+				CODE_SIGN_IDENTITY = "-";
+				CODE_SIGN_STYLE = Automatic;
 				COMBINE_HIDPI_IMAGES = YES;
-				DEVELOPMENT_TEAM = 2ED6AKD5KA;
-				ENABLE_HARDENED_RUNTIME = YES;
+				DEVELOPMENT_TEAM = "";
+				ENABLE_HARDENED_RUNTIME = NO;
 				INFOPLIST_FILE = Relauncher/Info.plist;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/../Frameworks";
 				MACOSX_DEPLOYMENT_TARGET = 10.11;

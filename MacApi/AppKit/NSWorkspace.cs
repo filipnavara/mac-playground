@@ -3,39 +3,22 @@ using System.Text.RegularExpressions;
 using System.Text;
 using System.Collections.Generic;
 using System.Threading;
-#if MONOMAC
-using MonoMac.Foundation;
-using MonoMac.AppKit;
-#elif XAMARINMAC
 using Foundation;
 using AppKit;
-#endif
 
 namespace MacApi.AppKit
 {
     public static class NSWorkspaceEx
     {
-		readonly static NSString NSWorkspaceLaunchConfigurationArguments = (NSString)"NSWorkspaceLaunchConfigurationArguments"; // NSWorkspace.LaunchConfigurationArguments;
-
-		public static int LaunchApplicationForPath(string path, string args, bool activate = true)
-		{
-			return LaunchApplicationForPath(path, SplitArgs(args), activate);
-		}
-
 		public static int LaunchApplicationForPath(string path, string[] args, bool activate = true)
         {
-            var options = new NSWorkspaceLaunchOptions();
-			var arguments = NSArray.FromObjects(args);
-			var configuration = NSDictionary.FromObjectAndKey(arguments, NSWorkspaceLaunchConfigurationArguments);
-			var url = new NSUrl(path, false);
-            
-			NSError error = new NSError();
-#if MONOMAC
-            var app = NSWorkspace.SharedWorkspace.LaunchApplication(url, options, configuration, error);
-#else
-            var app = NSWorkspace.SharedWorkspace.OpenURL(url, options, configuration, out error);
-#endif
-            if (error != null)
+			var options = NSWorkspaceLaunchOptions.Default;
+			var arguments = NSArray.FromStrings(args);
+			var configuration = NSDictionary.FromObjectAndKey(arguments, NSWorkspace.LaunchConfigurationArguments);
+			var url = NSUrl.FromFilename(path);
+			var app = NSWorkspace.SharedWorkspace.OpenURL(url, options, configuration, out NSError error);
+
+			if (error != null)
                 throw new ApplicationException("NSWorkspace failed to open URL: " + url);
 
             if (app == null)

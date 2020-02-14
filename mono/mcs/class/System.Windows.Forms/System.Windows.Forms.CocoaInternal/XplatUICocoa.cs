@@ -1592,10 +1592,9 @@ namespace System.Windows.Forms {
 
 		internal override void PostQuitMessage (int exitCode)
 		{
-			NSWindow winWrap = NSApplication.SharedApplication.MainWindow;
-			if (winWrap != null)
-				PostMessage (winWrap.ContentView.Handle, Msg.WM_QUIT, IntPtr.Zero, IntPtr.Zero);
-			PostMessage (IntPtr.Zero, Msg.WM_QUIT, IntPtr.Zero, IntPtr.Zero);
+			var window = NSApplication.SharedApplication.MainWindow;
+			var hwnd = window?.ContentView.Handle ?? IntPtr.Zero;
+			PostMessage(hwnd, Msg.WM_QUIT, new IntPtr(exitCode), IntPtr.Zero);
 		}
 
 		internal override void RequestAdditionalWM_NCMessages (IntPtr hwnd, bool hover, bool leave) {

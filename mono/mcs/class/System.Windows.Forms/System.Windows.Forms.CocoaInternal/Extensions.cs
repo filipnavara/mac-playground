@@ -15,6 +15,7 @@ using System;
 using AppKit;
 using Foundation;
 using ObjCRuntime;
+using CoreGraphics;
 #endif
 
 namespace System.Windows.Forms.Mac
@@ -375,6 +376,28 @@ namespace System.Windows.Forms.Mac
 		public static bool IsFullscreen(this NSWindow self)
 		{
 			return 0 != (self.StyleMask & NSWindowStyle.FullScreenWindow);
+		}
+
+		// The following two methods are backward compatible (10.7)
+
+		public static CGPoint ConvertPointFromScreenSafe(this NSWindow window, CGPoint point)
+		{
+			return window.ConvertRectFromScreen(new CGRect(point, CGSize.Empty)).Location;
+		}
+
+		public static CGPoint ConvertPointToScreenSafe(this NSWindow window, CGPoint point)
+		{
+			return window.ConvertRectToScreen(new CGRect(point, CGSize.Empty)).Location;
+		}
+
+		public static CGPoint ConvertPointFromWindow(this NSWindow window, CGPoint point, NSWindow source)
+		{
+			return window.ConvertPointFromScreenSafe(source.ConvertPointToScreenSafe(point));
+		}
+
+		public static CGPoint ConvertPointToWindow(this NSWindow window, CGPoint point, NSWindow target)
+		{
+			return target.ConvertPointFromScreenSafe(window.ConvertPointToScreenSafe(point));
 		}
 
 		public static NSDragOperation ToDragOperation(this DragDropEffects e)

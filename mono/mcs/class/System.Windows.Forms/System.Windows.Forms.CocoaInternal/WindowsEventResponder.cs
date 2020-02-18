@@ -108,7 +108,7 @@ namespace System.Windows.Forms.CocoaInternal
 			var location = NSEvent.CurrentMouseLocation;
 			var number = NSWindow.WindowNumberAtPoint(location, 0);
 			var window = NSApplication.SharedApplication.WindowWithWindowNumber(number) ?? e.Window;
-			var locationInWindow = window.ConvertPointFromScreen(location);
+			var locationInWindow = window.ConvertPointFromScreenSafe(location);
 
 			var msg = TranslateMouseCore(e, out bool client);
 			var newMouseView = window?.ContentView.HitTest(locationInWindow) ?? window?.ContentView.Superview?.HitTest(locationInWindow);
@@ -291,7 +291,7 @@ namespace System.Windows.Forms.CocoaInternal
 			var locationInWindow = e.LocationInWindow;
 			if (target != null && target.Window != null)
 			{
-				locationInWindow = target.Window.ConvertPointFromScreen(window.ConvertPointToScreen(locationInWindow));
+				locationInWindow = target.Window.ConvertPointFromWindow(locationInWindow, window);
 				window = target.Window;
 			}
 			else target = view;
@@ -321,7 +321,7 @@ namespace System.Windows.Forms.CocoaInternal
 				lParam = (IntPtr)(localMonoPoint.Y << 16 | (localMonoPoint.X & 0xFFFF)),
 				pt = window == null
 					? driver.NativeToMonoScreen(NSEvent.CurrentMouseLocation).ToPOINT()
-					: driver.NativeToMonoScreen(window.ConvertPointToScreen(locationInWindow)).ToPOINT(),
+					: driver.NativeToMonoScreen(window.ConvertPointToScreenSafe(locationInWindow)).ToPOINT(),
 				refobject = target
 			};
 		}

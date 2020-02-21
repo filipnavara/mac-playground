@@ -47,6 +47,7 @@ namespace System.Windows.Forms.CocoaInternal
 			: base(contentRect, aStyle, bufferingType, deferCreation)
 		{
 			this.driver = driver;
+			this.ReleasedWhenClosed = true;
 
 			// Disable tabbing on Sierra until we properly support it
 			var setTabbingModeSelector = new ObjCRuntime.Selector("setTabbingMode:");

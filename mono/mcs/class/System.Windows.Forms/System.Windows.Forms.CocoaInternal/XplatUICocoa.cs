@@ -554,15 +554,16 @@ namespace System.Windows.Forms {
 			if (c != null) {
 				Control[] controls = c.Controls.GetAllControls ();
 
+				for (int i = 0; i < controls.Length; i++)
+				{
+					AccumulateDestroyedHandles(controls[i], list);
+				}
+
 				if (c.IsHandleCreated && !c.IsDisposed) {
 					//Hwnd hwnd = Hwnd.ObjectFromHandle (c.Handle);
 
 					list.Add (c.Handle);
 					CleanupCachedWindows (c.Handle);
-				}
-
-				for (int  i = 0; i < controls.Length; i ++) {
-					AccumulateDestroyedHandles (controls[i], list);
 				}
 			}
 		}

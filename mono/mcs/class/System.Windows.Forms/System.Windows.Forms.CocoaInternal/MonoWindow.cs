@@ -37,6 +37,8 @@ namespace System.Windows.Forms.CocoaInternal
 	{
 		XplatUICocoa driver;
 		IntPtr prevFocus;
+		bool disposed;
+		bool key;
 
 		public MonoWindow(IntPtr handle) : base(handle)
 		{
@@ -126,6 +128,10 @@ namespace System.Windows.Forms.CocoaInternal
 		{
 			DebugUtility.WriteInfoIfChanged(theEvent);
 
+			// See notes in IsKeyWindow below.
+			if (disposed)
+				return;
+
 			lastEventType = theEvent.Type;
 			currentEvent = theEvent;
 
@@ -206,10 +212,41 @@ namespace System.Windows.Forms.CocoaInternal
 
 			return true;
 		}
+
+		protected override void Dispose(bool disposing)
+		{
+			if (disposed)
+				return;
+
+			disposed = true;
+
+			base.Dispose(disposing);
+		}
+
+		~MonoWindow()
+		{
+			Dispose(false);
+		}
+
 		public override bool IsKeyWindow
 		{
-			// This allows WebView to change cursor when hovering over DOM nodes even if it's window is not key (pop-ups etc).
-			get { return base.IsKeyWindow || IsDeliveringMouseMovedToWebHTMLView(); }
+			get
+			{
+				// NOTE:
+				// The 'disposed' protection is necessary, because the native NSWindow lasts longer than the Form.
+				// The NSWindow is NOT destroyed in DestroyHandle(), it's just closed, and the final "release"
+				// message is sent *afterwards* (even if releasedWhenClosed is true)!
+				// In the mean time (before or during final "release"), the "isKeyWindow" message
+				// is sent by the Cocoa framework, to eventually make another view the "key".
+				// Since the Mono bridge between native NSWindow and managed Form objects still exists at the moment,
+				// this "IsKeyWindow" c# getter gets invoked, regardless the fact that it is already disposed.
+
+				if (disposed)
+					return key;
+
+				// This allows WebView to change cursor when hovering over DOM nodes even if it's window is not key (pop-ups etc).
+				return base.IsKeyWindow || IsDeliveringMouseMovedToWebHTMLView();
+			}
 		}
 
 		protected bool IsDeliveringMouseMovedToWebHTMLView()
@@ -233,15 +270,6 @@ namespace System.Windows.Forms.CocoaInternal
 			{
 				// Remove the window from Windows menu
 				NSApplication.SharedApplication.RemoveWindowsItem(this);
-
-				if (IsKeyWindow)
-				{
-					NSApplication.SharedApplication.BeginInvokeOnMainThread(() =>
-					{
-						try { ActivateNextWindow(); }
-						catch (Exception e) { Debug.WriteLine("Failed async call ActivateNextWindow(: " + e); }
-					});
-				}
 			}
 
 			if (wasVisible != IsVisible)
@@ -302,7 +330,7 @@ namespace System.Windows.Forms.CocoaInternal
 			//driver.SendMessage(ContentView.Handle, Msg.WM_NCACTIVATE, (IntPtr)WindowActiveFlags.WA_ACTIVE, (IntPtr)(-1));
 			driver.SendMessage(ContentView.Handle, Msg.WM_ACTIVATE, (IntPtr)WindowActiveFlags.WA_ACTIVE, IntPtr.Zero);
 
-			if (IsKeyWindow && FirstResponder != null) // For the case that previous WM_ACTIVATE in fact did not activate this window.
+			if ((key = IsKeyWindow) && FirstResponder != null) // For the case that previous WM_ACTIVATE in fact did not activate this window.
 			{
 				if (FirstResponder == this)
 					MakeFirstResponder(ContentView); // InitialResponder?
@@ -326,7 +354,7 @@ namespace System.Windows.Forms.CocoaInternal
 			//driver.SendMessage(ContentView.Handle, Msg.WM_NCACTIVATE, (IntPtr)WindowActiveFlags.WA_INACTIVE, (IntPtr)(-1));
 			driver.SendMessage(ContentView.Handle, Msg.WM_ACTIVATE, (IntPtr)WindowActiveFlags.WA_INACTIVE, newKeyWindow != null ? newKeyWindow.ContentView.Handle : IntPtr.Zero);
 
-			if (!IsKeyWindow && FirstResponder != null) // For the case that previous WM_ACTIVATE in fact did not deactivate this window.
+			if (!(key = IsKeyWindow) && FirstResponder != null) // For the case that previous WM_ACTIVATE in fact did not deactivate this window.
 				driver.SendMessage(FirstResponder.Handle, Msg.WM_KILLFOCUS, IntPtr.Zero, IntPtr.Zero);
 
 			/*foreach (NSWindow utility_window in XplatUICocoa.UtilityWindows)

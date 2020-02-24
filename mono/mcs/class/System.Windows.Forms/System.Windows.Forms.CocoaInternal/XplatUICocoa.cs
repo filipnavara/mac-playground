@@ -939,9 +939,9 @@ namespace System.Windows.Forms {
 				SetWindowState(viewWrapper.Handle, FormWindowState.Maximized);
 			}
 
-			keepAlivePool.Add(viewWrapper.Handle, viewWrapper);
+			keepAlivePool[viewWrapper.Handle] = viewWrapper;
 			if (isTopLevel)
-				keepAlivePool.Add(windowWrapper.Handle, windowWrapper);
+				keepAlivePool[windowWrapper.Handle] = windowWrapper;
 
 			(viewWrapper as MonoView)?.FinishCreateWindow();
 
@@ -1141,9 +1141,9 @@ namespace System.Windows.Forms {
 					var app = NSApplication.SharedApplication;
 					if (winWrap == app.ModalWindow)
 						EndModal(winWrap);
+					app.RemoveWindowsItem (winWrap);
+					keepAlivePool.Remove (winWrap.Handle);
 					winWrap.Close ();
-					app.RemoveWindowsItem(winWrap);
-					keepAlivePool.Remove(winWrap.Handle);
 				} else {
 					vuWrap.RemoveFromSuperviewWithoutNeedingDisplay ();
 				}

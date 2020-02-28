@@ -61,11 +61,27 @@ namespace System.Windows.Forms.CocoaInternal
 
 		void RegisterEventHandlers()
 		{
+			WillClose += WindowWillClose;
 			WindowShouldClose += ShouldClose;
 			WillResize += WindowWillResize;
 			WillStartLiveResize += WindowWillStartLiveResize;
 			DidEndLiveResize += WindowDidEndLiveResize;
 			DidMove += WindowDidMove;
+		}
+
+		void UnregisterEventHandlers()
+		{
+			WillClose -= WindowWillClose;
+			WindowShouldClose -= ShouldClose;
+			WillResize -= WindowWillResize;
+			WillStartLiveResize -= WindowWillStartLiveResize;
+			DidEndLiveResize -= WindowDidEndLiveResize;
+			DidMove -= WindowDidMove;
+		}
+
+		internal virtual void WindowWillClose(object sender, EventArgs e)
+		{
+			UnregisterEventHandlers();
 		}
 
 		public override bool MakeFirstResponder(NSResponder aResponder)

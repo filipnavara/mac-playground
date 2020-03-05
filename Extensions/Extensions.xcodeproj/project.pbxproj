@@ -44,6 +44,7 @@
 		637C154C2410F357006E93F4 /* Cocoa.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Cocoa.framework; path = System/Library/Frameworks/Cocoa.framework; sourceTree = SDKROOT; };
 		637C157224113992006E93F4 /* eMClientShareExtension.entitlements */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.entitlements; path = eMClientShareExtension.entitlements; sourceTree = "<group>"; };
 		637C157324114313006E93F4 /* eMClientExtensionsContainer.entitlements */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.entitlements; path = eMClientExtensionsContainer.entitlements; sourceTree = "<group>"; };
+		637C15742411AF7A006E93F4 /* eMClientShareExtensionRelease.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; path = eMClientShareExtensionRelease.entitlements; sourceTree = "<group>"; };
 		639397D124085E89006CFB95 /* eMClientExtensionsContainer.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = eMClientExtensionsContainer.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		639397D324085E89006CFB95 /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
 		639397D524085E89006CFB95 /* ViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ViewController.swift; sourceTree = "<group>"; };
@@ -117,6 +118,7 @@
 		639BD4602408215F001EB359 /* eMClientShareExtension */ = {
 			isa = PBXGroup;
 			children = (
+				637C15742411AF7A006E93F4 /* eMClientShareExtensionRelease.entitlements */,
 				637C157224113992006E93F4 /* eMClientShareExtension.entitlements */,
 				639BD4612408215F001EB359 /* icon.icns */,
 				639BD4632408215F001EB359 /* ShareViewController.swift */,
@@ -449,12 +451,12 @@
 		639BD46F2408215F001EB359 /* Release */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
-				CODE_SIGN_ENTITLEMENTS = eMClientShareExtension/eMClientShareExtension.entitlements;
+				CODE_SIGN_ENTITLEMENTS = eMClientShareExtension/eMClientShareExtensionRelease.entitlements;
 				CODE_SIGN_IDENTITY = "Developer ID Application";
 				CODE_SIGN_STYLE = Manual;
 				COMBINE_HIDPI_IMAGES = YES;
 				DEVELOPMENT_TEAM = 2ED6AKD5KA;
-				ENABLE_HARDENED_RUNTIME = NO;
+				ENABLE_HARDENED_RUNTIME = YES;
 				INFOPLIST_FILE = eMClientShareExtension/Info.plist;
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",

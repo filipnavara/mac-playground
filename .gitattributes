@@ -70,6 +70,7 @@ Extensions/eMClientExtensionsContainer/eMClientExtensionsContainer.entitlements 
 Extensions/eMClientShareExtension/Info.plist -text
 Extensions/eMClientShareExtension/ShareViewController.swift -text
 Extensions/eMClientShareExtension/eMClientShareExtension.entitlements -text
+Extensions/eMClientShareExtension/eMClientShareExtensionRelease.entitlements -text
 Extensions/eMClientShareExtension/icon.icns -text
 FormsTest/App.config -text
 FormsTest/App.ico -text

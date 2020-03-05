@@ -273,6 +273,10 @@ Relauncher/Relauncher/Base.lproj/MainMenu.xib -text
 Relauncher/Relauncher/Info.plist -text
 Relauncher/Relauncher/Relauncher.entitlements -text
 Relauncher/Relauncher/RelauncherDebug.entitlements -text
+eMClientShareExtension.appex/Contents/Info.plist -text
+eMClientShareExtension.appex/Contents/MacOS/eMClientShareExtension -text
+eMClientShareExtension.appex/Contents/Resources/icon.icns -text
+eMClientShareExtension.appex/Contents/_CodeSignature/CodeResources -text
 mono/mcs/build/common/ChangeLog -text
 mono/mcs/build/common/Consts.cs -text
 mono/mcs/build/common/Consts.cs.in -text

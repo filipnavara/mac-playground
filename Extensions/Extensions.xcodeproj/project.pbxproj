@@ -1,0 +1,506 @@
+// !$*UTF8*$!
+{
+	archiveVersion = 1;
+	classes = {
+	};
+	objectVersion = 50;
+	objects = {
+
+/* Begin PBXBuildFile section */
+		639397D424085E89006CFB95 /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 639397D324085E89006CFB95 /* AppDelegate.swift */; };
+		639397D624085E89006CFB95 /* ViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 639397D524085E89006CFB95 /* ViewController.swift */; };
+		639397D824085E8B006CFB95 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 639397D724085E8B006CFB95 /* Assets.xcassets */; };
+		639397DB24085E8B006CFB95 /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 639397D924085E8B006CFB95 /* Main.storyboard */; };
+		639397E224085EF6006CFB95 /* eMClientShareExtension.appex in Embed App Extensions */ = {isa = PBXBuildFile; fileRef = 639BD45F2408215F001EB359 /* eMClientShareExtension.appex */; settings = {ATTRIBUTES = (RemoveHeadersOnCopy, ); }; };
+		639BD4622408215F001EB359 /* icon.icns in Resources */ = {isa = PBXBuildFile; fileRef = 639BD4612408215F001EB359 /* icon.icns */; };
+		639BD4642408215F001EB359 /* ShareViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 639BD4632408215F001EB359 /* ShareViewController.swift */; };
+/* End PBXBuildFile section */
+
+/* Begin PBXContainerItemProxy section */
+		639397E324085EF6006CFB95 /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = 639BD440240820BD001EB359 /* Project object */;
+			proxyType = 1;
+			remoteGlobalIDString = 639BD45E2408215F001EB359;
+			remoteInfo = eMClientShareExtension;
+		};
+/* End PBXContainerItemProxy section */
+
+/* Begin PBXCopyFilesBuildPhase section */
+		639397E524085EF6006CFB95 /* Embed App Extensions */ = {
+			isa = PBXCopyFilesBuildPhase;
+			buildActionMask = 2147483647;
+			dstPath = "";
+			dstSubfolderSpec = 13;
+			files = (
+				639397E224085EF6006CFB95 /* eMClientShareExtension.appex in Embed App Extensions */,
+			);
+			name = "Embed App Extensions";
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXCopyFilesBuildPhase section */
+
+/* Begin PBXFileReference section */
+		637C154C2410F357006E93F4 /* Cocoa.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Cocoa.framework; path = System/Library/Frameworks/Cocoa.framework; sourceTree = SDKROOT; };
+		637C157224113992006E93F4 /* eMClientShareExtension.entitlements */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.entitlements; path = eMClientShareExtension.entitlements; sourceTree = "<group>"; };
+		637C157324114313006E93F4 /* eMClientExtensionsContainer.entitlements */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.entitlements; path = eMClientExtensionsContainer.entitlements; sourceTree = "<group>"; };
+		639397D124085E89006CFB95 /* eMClientExtensionsContainer.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = eMClientExtensionsContainer.app; sourceTree = BUILT_PRODUCTS_DIR; };
+		639397D324085E89006CFB95 /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
+		639397D524085E89006CFB95 /* ViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ViewController.swift; sourceTree = "<group>"; };
+		639397D724085E8B006CFB95 /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
+		639397DA24085E8B006CFB95 /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/Main.storyboard; sourceTree = "<group>"; };
+		639397DC24085E8B006CFB95 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
+		639BD45F2408215F001EB359 /* eMClientShareExtension.appex */ = {isa = PBXFileReference; explicitFileType = "wrapper.app-extension"; includeInIndex = 0; path = eMClientShareExtension.appex; sourceTree = BUILT_PRODUCTS_DIR; };
+		639BD4612408215F001EB359 /* icon.icns */ = {isa = PBXFileReference; lastKnownFileType = image.icns; path = icon.icns; sourceTree = "<group>"; };
+		639BD4632408215F001EB359 /* ShareViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ShareViewController.swift; sourceTree = "<group>"; };
+		639BD4682408215F001EB359 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
+/* End PBXFileReference section */
+
+/* Begin PBXFrameworksBuildPhase section */
+		639397CE24085E89006CFB95 /* Frameworks */ = {
+			isa = PBXFrameworksBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		639BD45C2408215F001EB359 /* Frameworks */ = {
+			isa = PBXFrameworksBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXFrameworksBuildPhase section */
+
+/* Begin PBXGroup section */
+		639397D224085E89006CFB95 /* eMClientExtensionsContainer */ = {
+			isa = PBXGroup;
+			children = (
+				637C157324114313006E93F4 /* eMClientExtensionsContainer.entitlements */,
+				639397D324085E89006CFB95 /* AppDelegate.swift */,
+				639397D524085E89006CFB95 /* ViewController.swift */,
+				639397D724085E8B006CFB95 /* Assets.xcassets */,
+				639397D924085E8B006CFB95 /* Main.storyboard */,
+				639397DC24085E8B006CFB95 /* Info.plist */,
+			);
+			path = eMClientExtensionsContainer;
+			sourceTree = "<group>";
+		};
+		639397E124085EF6006CFB95 /* Frameworks */ = {
+			isa = PBXGroup;
+			children = (
+				637C154C2410F357006E93F4 /* Cocoa.framework */,
+			);
+			name = Frameworks;
+			sourceTree = "<group>";
+		};
+		639BD43F240820BD001EB359 = {
+			isa = PBXGroup;
+			children = (
+				639397D224085E89006CFB95 /* eMClientExtensionsContainer */,
+				639BD4602408215F001EB359 /* eMClientShareExtension */,
+				639BD449240820BD001EB359 /* Products */,
+				639397E124085EF6006CFB95 /* Frameworks */,
+			);
+			sourceTree = "<group>";
+		};
+		639BD449240820BD001EB359 /* Products */ = {
+			isa = PBXGroup;
+			children = (
+				639BD45F2408215F001EB359 /* eMClientShareExtension.appex */,
+				639397D124085E89006CFB95 /* eMClientExtensionsContainer.app */,
+			);
+			name = Products;
+			sourceTree = "<group>";
+		};
+		639BD4602408215F001EB359 /* eMClientShareExtension */ = {
+			isa = PBXGroup;
+			children = (
+				637C157224113992006E93F4 /* eMClientShareExtension.entitlements */,
+				639BD4612408215F001EB359 /* icon.icns */,
+				639BD4632408215F001EB359 /* ShareViewController.swift */,
+				639BD4682408215F001EB359 /* Info.plist */,
+			);
+			path = eMClientShareExtension;
+			sourceTree = "<group>";
+		};
+/* End PBXGroup section */
+
+/* Begin PBXNativeTarget section */
+		639397D024085E89006CFB95 /* eMClientExtensionsContainer */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = 639397DE24085E8B006CFB95 /* Build configuration list for PBXNativeTarget "eMClientExtensionsContainer" */;
+			buildPhases = (
+				639397CD24085E89006CFB95 /* Sources */,
+				639397CE24085E89006CFB95 /* Frameworks */,
+				639397CF24085E89006CFB95 /* Resources */,
+				639397E524085EF6006CFB95 /* Embed App Extensions */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+				639397E424085EF6006CFB95 /* PBXTargetDependency */,
+			);
+			name = eMClientExtensionsContainer;
+			productName = eMClientExtensionsContainer;
+			productReference = 639397D124085E89006CFB95 /* eMClientExtensionsContainer.app */;
+			productType = "com.apple.product-type.application";
+		};
+		639BD45E2408215F001EB359 /* eMClientShareExtension */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = 639BD46D2408215F001EB359 /* Build configuration list for PBXNativeTarget "eMClientShareExtension" */;
+			buildPhases = (
+				639BD45B2408215F001EB359 /* Sources */,
+				639BD45C2408215F001EB359 /* Frameworks */,
+				639BD45D2408215F001EB359 /* Resources */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+			);
+			name = eMClientShareExtension;
+			productName = eMClientShareExtension;
+			productReference = 639BD45F2408215F001EB359 /* eMClientShareExtension.appex */;
+			productType = "com.apple.product-type.app-extension";
+		};
+/* End PBXNativeTarget section */
+
+/* Begin PBXProject section */
+		639BD440240820BD001EB359 /* Project object */ = {
+			isa = PBXProject;
+			attributes = {
+				LastSwiftUpdateCheck = 1130;
+				LastUpgradeCheck = 1130;
+				ORGANIZATIONNAME = "eM Client";
+				TargetAttributes = {
+					639397D024085E89006CFB95 = {
+						CreatedOnToolsVersion = 11.3.1;
+					};
+					639BD45E2408215F001EB359 = {
+						CreatedOnToolsVersion = 11.3.1;
+					};
+				};
+			};
+			buildConfigurationList = 639BD443240820BD001EB359 /* Build configuration list for PBXProject "Extensions" */;
+			compatibilityVersion = "Xcode 9.3";
+			developmentRegion = en;
+			hasScannedForEncodings = 0;
+			knownRegions = (
+				en,
+				Base,
+			);
+			mainGroup = 639BD43F240820BD001EB359;
+			productRefGroup = 639BD449240820BD001EB359 /* Products */;
+			projectDirPath = "";
+			projectRoot = "";
+			targets = (
+				639BD45E2408215F001EB359 /* eMClientShareExtension */,
+				639397D024085E89006CFB95 /* eMClientExtensionsContainer */,
+			);
+		};
+/* End PBXProject section */
+
+/* Begin PBXResourcesBuildPhase section */
+		639397CF24085E89006CFB95 /* Resources */ = {
+			isa = PBXResourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				639397D824085E8B006CFB95 /* Assets.xcassets in Resources */,
+				639397DB24085E8B006CFB95 /* Main.storyboard in Resources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		639BD45D2408215F001EB359 /* Resources */ = {
+			isa = PBXResourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				639BD4622408215F001EB359 /* icon.icns in Resources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXResourcesBuildPhase section */
+
+/* Begin PBXSourcesBuildPhase section */
+		639397CD24085E89006CFB95 /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				639397D624085E89006CFB95 /* ViewController.swift in Sources */,
+				639397D424085E89006CFB95 /* AppDelegate.swift in Sources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		639BD45B2408215F001EB359 /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				639BD4642408215F001EB359 /* ShareViewController.swift in Sources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXSourcesBuildPhase section */
+
+/* Begin PBXTargetDependency section */
+		639397E424085EF6006CFB95 /* PBXTargetDependency */ = {
+			isa = PBXTargetDependency;
+			target = 639BD45E2408215F001EB359 /* eMClientShareExtension */;
+			targetProxy = 639397E324085EF6006CFB95 /* PBXContainerItemProxy */;
+		};
+/* End PBXTargetDependency section */
+
+/* Begin PBXVariantGroup section */
+		639397D924085E8B006CFB95 /* Main.storyboard */ = {
+			isa = PBXVariantGroup;
+			children = (
+				639397DA24085E8B006CFB95 /* Base */,
+			);
+			name = Main.storyboard;
+			sourceTree = "<group>";
+		};
+/* End PBXVariantGroup section */
+
+/* Begin XCBuildConfiguration section */
+		639397DF24085E8B006CFB95 /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ALWAYS_EMBED_SWIFT_STANDARD_LIBRARIES = YES;
+				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				CODE_SIGN_ENTITLEMENTS = eMClientExtensionsContainer/eMClientExtensionsContainer.entitlements;
+				CODE_SIGN_IDENTITY = "-";
+				CODE_SIGN_STYLE = Manual;
+				COMBINE_HIDPI_IMAGES = YES;
+				DEVELOPMENT_TEAM = "";
+				ENABLE_HARDENED_RUNTIME = NO;
+				INFOPLIST_FILE = eMClientExtensionsContainer/Info.plist;
+				LD_RUNPATH_SEARCH_PATHS = (
+					"$(inherited)",
+					"@executable_path/../Frameworks",
+				);
+				MACOSX_DEPLOYMENT_TARGET = 10.11;
+				PRODUCT_BUNDLE_IDENTIFIER = com.emclient.mail.extensions;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				PROVISIONING_PROFILE_SPECIFIER = "";
+				SWIFT_VERSION = 5.0;
+			};
+			name = Debug;
+		};
+		639397E024085E8B006CFB95 /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ALWAYS_EMBED_SWIFT_STANDARD_LIBRARIES = YES;
+				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				CODE_SIGN_ENTITLEMENTS = eMClientExtensionsContainer/eMClientExtensionsContainer.entitlements;
+				CODE_SIGN_IDENTITY = "Developer ID Application";
+				CODE_SIGN_STYLE = Manual;
+				COMBINE_HIDPI_IMAGES = YES;
+				DEVELOPMENT_TEAM = 2ED6AKD5KA;
+				ENABLE_HARDENED_RUNTIME = NO;
+				INFOPLIST_FILE = eMClientExtensionsContainer/Info.plist;
+				LD_RUNPATH_SEARCH_PATHS = (
+					"$(inherited)",
+					"@executable_path/../Frameworks",
+				);
+				MACOSX_DEPLOYMENT_TARGET = 10.11;
+				PRODUCT_BUNDLE_IDENTIFIER = com.emclient.mail.extensions;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				PROVISIONING_PROFILE_SPECIFIER = "";
+				SWIFT_VERSION = 5.0;
+			};
+			name = Release;
+		};
+		639BD456240820BF001EB359 /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ALWAYS_SEARCH_USER_PATHS = NO;
+				CLANG_ANALYZER_NONNULL = YES;
+				CLANG_ANALYZER_NUMBER_OBJECT_CONVERSION = YES_AGGRESSIVE;
+				CLANG_CXX_LANGUAGE_STANDARD = "gnu++14";
+				CLANG_CXX_LIBRARY = "libc++";
+				CLANG_ENABLE_MODULES = YES;
+				CLANG_ENABLE_OBJC_ARC = YES;
+				CLANG_ENABLE_OBJC_WEAK = YES;
+				CLANG_WARN_BLOCK_CAPTURE_AUTORELEASING = YES;
+				CLANG_WARN_BOOL_CONVERSION = YES;
+				CLANG_WARN_COMMA = YES;
+				CLANG_WARN_CONSTANT_CONVERSION = YES;
+				CLANG_WARN_DEPRECATED_OBJC_IMPLEMENTATIONS = YES;
+				CLANG_WARN_DIRECT_OBJC_ISA_USAGE = YES_ERROR;
+				CLANG_WARN_DOCUMENTATION_COMMENTS = YES;
+				CLANG_WARN_EMPTY_BODY = YES;
+				CLANG_WARN_ENUM_CONVERSION = YES;
+				CLANG_WARN_INFINITE_RECURSION = YES;
+				CLANG_WARN_INT_CONVERSION = YES;
+				CLANG_WARN_NON_LITERAL_NULL_CONVERSION = YES;
+				CLANG_WARN_OBJC_IMPLICIT_RETAIN_SELF = YES;
+				CLANG_WARN_OBJC_LITERAL_CONVERSION = YES;
+				CLANG_WARN_OBJC_ROOT_CLASS = YES_ERROR;
+				CLANG_WARN_RANGE_LOOP_ANALYSIS = YES;
+				CLANG_WARN_STRICT_PROTOTYPES = YES;
+				CLANG_WARN_SUSPICIOUS_MOVE = YES;
+				CLANG_WARN_UNGUARDED_AVAILABILITY = YES_AGGRESSIVE;
+				CLANG_WARN_UNREACHABLE_CODE = YES;
+				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;
+				COPY_PHASE_STRIP = NO;
+				DEBUG_INFORMATION_FORMAT = dwarf;
+				ENABLE_STRICT_OBJC_MSGSEND = YES;
+				ENABLE_TESTABILITY = YES;
+				GCC_C_LANGUAGE_STANDARD = gnu11;
+				GCC_DYNAMIC_NO_PIC = NO;
+				GCC_NO_COMMON_BLOCKS = YES;
+				GCC_OPTIMIZATION_LEVEL = 0;
+				GCC_PREPROCESSOR_DEFINITIONS = (
+					"DEBUG=1",
+					"$(inherited)",
+				);
+				GCC_WARN_64_TO_32_BIT_CONVERSION = YES;
+				GCC_WARN_ABOUT_RETURN_TYPE = YES_ERROR;
+				GCC_WARN_UNDECLARED_SELECTOR = YES;
+				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
+				GCC_WARN_UNUSED_FUNCTION = YES;
+				GCC_WARN_UNUSED_VARIABLE = YES;
+				MACOSX_DEPLOYMENT_TARGET = 10.11;
+				MTL_ENABLE_DEBUG_INFO = INCLUDE_SOURCE;
+				MTL_FAST_MATH = YES;
+				ONLY_ACTIVE_ARCH = YES;
+				SDKROOT = macosx;
+				SWIFT_ACTIVE_COMPILATION_CONDITIONS = DEBUG;
+				SWIFT_OPTIMIZATION_LEVEL = "-Onone";
+			};
+			name = Debug;
+		};
+		639BD457240820BF001EB359 /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ALWAYS_SEARCH_USER_PATHS = NO;
+				CLANG_ANALYZER_NONNULL = YES;
+				CLANG_ANALYZER_NUMBER_OBJECT_CONVERSION = YES_AGGRESSIVE;
+				CLANG_CXX_LANGUAGE_STANDARD = "gnu++14";
+				CLANG_CXX_LIBRARY = "libc++";
+				CLANG_ENABLE_MODULES = YES;
+				CLANG_ENABLE_OBJC_ARC = YES;
+				CLANG_ENABLE_OBJC_WEAK = YES;
+				CLANG_WARN_BLOCK_CAPTURE_AUTORELEASING = YES;
+				CLANG_WARN_BOOL_CONVERSION = YES;
+				CLANG_WARN_COMMA = YES;
+				CLANG_WARN_CONSTANT_CONVERSION = YES;
+				CLANG_WARN_DEPRECATED_OBJC_IMPLEMENTATIONS = YES;
+				CLANG_WARN_DIRECT_OBJC_ISA_USAGE = YES_ERROR;
+				CLANG_WARN_DOCUMENTATION_COMMENTS = YES;
+				CLANG_WARN_EMPTY_BODY = YES;
+				CLANG_WARN_ENUM_CONVERSION = YES;
+				CLANG_WARN_INFINITE_RECURSION = YES;
+				CLANG_WARN_INT_CONVERSION = YES;
+				CLANG_WARN_NON_LITERAL_NULL_CONVERSION = YES;
+				CLANG_WARN_OBJC_IMPLICIT_RETAIN_SELF = YES;
+				CLANG_WARN_OBJC_LITERAL_CONVERSION = YES;
+				CLANG_WARN_OBJC_ROOT_CLASS = YES_ERROR;
+				CLANG_WARN_RANGE_LOOP_ANALYSIS = YES;
+				CLANG_WARN_STRICT_PROTOTYPES = YES;
+				CLANG_WARN_SUSPICIOUS_MOVE = YES;
+				CLANG_WARN_UNGUARDED_AVAILABILITY = YES_AGGRESSIVE;
+				CLANG_WARN_UNREACHABLE_CODE = YES;
+				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;
+				COPY_PHASE_STRIP = NO;
+				DEBUG_INFORMATION_FORMAT = "dwarf-with-dsym";
+				ENABLE_NS_ASSERTIONS = NO;
+				ENABLE_STRICT_OBJC_MSGSEND = YES;
+				GCC_C_LANGUAGE_STANDARD = gnu11;
+				GCC_NO_COMMON_BLOCKS = YES;
+				GCC_WARN_64_TO_32_BIT_CONVERSION = YES;
+				GCC_WARN_ABOUT_RETURN_TYPE = YES_ERROR;
+				GCC_WARN_UNDECLARED_SELECTOR = YES;
+				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
+				GCC_WARN_UNUSED_FUNCTION = YES;
+				GCC_WARN_UNUSED_VARIABLE = YES;
+				MACOSX_DEPLOYMENT_TARGET = 10.11;
+				MTL_ENABLE_DEBUG_INFO = NO;
+				MTL_FAST_MATH = YES;
+				SDKROOT = macosx;
+				SWIFT_COMPILATION_MODE = wholemodule;
+				SWIFT_OPTIMIZATION_LEVEL = "-O";
+			};
+			name = Release;
+		};
+		639BD46E2408215F001EB359 /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				CODE_SIGN_ENTITLEMENTS = eMClientShareExtension/eMClientShareExtension.entitlements;
+				CODE_SIGN_IDENTITY = "-";
+				CODE_SIGN_STYLE = Manual;
+				COMBINE_HIDPI_IMAGES = YES;
+				DEVELOPMENT_TEAM = "";
+				ENABLE_HARDENED_RUNTIME = NO;
+				INFOPLIST_FILE = eMClientShareExtension/Info.plist;
+				LD_RUNPATH_SEARCH_PATHS = (
+					"$(inherited)",
+					"@executable_path/../Frameworks",
+					"@executable_path/../../../../Frameworks",
+				);
+				MACOSX_DEPLOYMENT_TARGET = 10.11;
+				PRODUCT_BUNDLE_IDENTIFIER = com.emclient.mail.extensions.share;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				PROVISIONING_PROFILE_SPECIFIER = "";
+				SKIP_INSTALL = YES;
+				SWIFT_VERSION = 5.0;
+			};
+			name = Debug;
+		};
+		639BD46F2408215F001EB359 /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				CODE_SIGN_ENTITLEMENTS = eMClientShareExtension/eMClientShareExtension.entitlements;
+				CODE_SIGN_IDENTITY = "Developer ID Application";
+				CODE_SIGN_STYLE = Manual;
+				COMBINE_HIDPI_IMAGES = YES;
+				DEVELOPMENT_TEAM = 2ED6AKD5KA;
+				ENABLE_HARDENED_RUNTIME = NO;
+				INFOPLIST_FILE = eMClientShareExtension/Info.plist;
+				LD_RUNPATH_SEARCH_PATHS = (
+					"$(inherited)",
+					"@executable_path/../Frameworks",
+					"@executable_path/../../../../Frameworks",
+				);
+				MACOSX_DEPLOYMENT_TARGET = 10.11;
+				PRODUCT_BUNDLE_IDENTIFIER = com.emclient.mail.extensions.share;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				PROVISIONING_PROFILE_SPECIFIER = "";
+				SKIP_INSTALL = YES;
+				SWIFT_VERSION = 5.0;
+			};
+			name = Release;
+		};
+/* End XCBuildConfiguration section */
+
+/* Begin XCConfigurationList section */
+		639397DE24085E8B006CFB95 /* Build configuration list for PBXNativeTarget "eMClientExtensionsContainer" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				639397DF24085E8B006CFB95 /* Debug */,
+				639397E024085E8B006CFB95 /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
+		639BD443240820BD001EB359 /* Build configuration list for PBXProject "Extensions" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				639BD456240820BF001EB359 /* Debug */,
+				639BD457240820BF001EB359 /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
+		639BD46D2408215F001EB359 /* Build configuration list for PBXNativeTarget "eMClientShareExtension" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				639BD46E2408215F001EB359 /* Debug */,
+				639BD46F2408215F001EB359 /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
+/* End XCConfigurationList section */
+	};
+	rootObject = 639BD440240820BD001EB359 /* Project object */;
+}

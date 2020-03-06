@@ -134,6 +134,9 @@ namespace MacApi.Posix
 		[DllImport(Constants.libcLibrary, SetLastError = true)]
 		public static extern IntPtr open(string path, FileMode mode);
 
+		[DllImport(Constants.libcLibrary)]
+		public static extern void exit(int status);
+
 		#endregion
-    }
+	}
 }

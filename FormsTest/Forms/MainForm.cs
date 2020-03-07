@@ -131,7 +131,7 @@ namespace FormsTest
 			AddButton("Back color", () => { ChangeBackColor(); });
 #endif
 
-			AddButton("Data Grid", () => { new DataGridForm().Show(); });
+			//AddButton("Data Grid", () => { new DataGridForm().Show(); });
 		}
 
 		List<Button> buttons = new List<Button>();

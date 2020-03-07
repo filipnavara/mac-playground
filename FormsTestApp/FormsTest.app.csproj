@@ -100,12 +100,11 @@
   <ItemGroup>
     <None Include="Entitlements.plist" />
     <None Include="Info.plist" />
-    <None Include="InfoTemplate.plist" />
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Program.cs" />
     <Compile Include="FormsTestApplication.cs" />
   </ItemGroup>
-  <Import Project="..\..\..\Tools\BuildTasks\MailClient.BuildTasks.targets" />
+  <!--<Import Project="..\..\..\Tools\BuildTasks\MailClient.BuildTasks.targets" />-->
   <Import Project="$(MSBuildExtensionsPath)\Xamarin\Mac\Xamarin.Mac.CSharp.targets" />
 </Project>
